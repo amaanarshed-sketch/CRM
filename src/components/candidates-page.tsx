@@ -17,7 +17,7 @@ export function CandidatesPage() {
         title="Leads"
         kicker="Lead database"
         action={
-          <button onClick={() => setAdding((value) => !value)} className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800">
+          <button onClick={() => setAdding((value) => !value)} className="btn-primary">
             <Plus size={18} />
             {adding ? "Close form" : "Add lead"}
           </button>

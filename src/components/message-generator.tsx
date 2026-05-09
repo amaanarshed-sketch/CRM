@@ -35,8 +35,8 @@ export function GenerateMessageButton({
         onClick={() => setOpen(true)}
         className={
           compact
-            ? "inline-flex items-center gap-1.5 rounded-lg border border-teal-200 px-2 py-2 text-xs font-bold text-teal-700 hover:bg-teal-50"
-            : "inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800"
+            ? "inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-white px-2 py-2 text-xs font-bold text-blue-700 hover:bg-blue-50"
+            : "btn-primary"
         }
         aria-label={label}
       >
@@ -83,19 +83,20 @@ export function MessageGeneratorModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 p-4">
-      <section className="w-full max-w-2xl rounded-xl border border-slate-200 bg-white p-5 shadow-xl">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 p-4 backdrop-blur-sm">
+      <section className="app-card w-full max-w-2xl p-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-black text-slate-950">Generate follow-up message</h2>
-            <p className="text-sm text-slate-500">
-              Copy-ready WhatsApp/email text only. Nothing is sent automatically.
+            <p className="eyebrow">Draft only</p>
+            <h2 className="mt-1 text-lg font-black text-[#08090A]">Generate follow-up message</h2>
+            <p className="text-sm text-[#687184]">
+              Creates copy-ready WhatsApp/email text. LeadLoop never sends it automatically.
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50"
+            className="btn-secondary p-2 text-[#687184]"
             aria-label="Close message generator"
           >
             <X size={18} />
@@ -105,7 +106,7 @@ export function MessageGeneratorModal({
         <label className="mt-4 block text-sm font-bold text-slate-700">
           Message type
           <select
-            className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold"
+            className="field-control mt-1 text-sm font-semibold"
             value={kind}
             onChange={(event) => {
               setKind(event.target.value as FollowUpKind);
@@ -118,17 +119,17 @@ export function MessageGeneratorModal({
           </select>
         </label>
 
-        <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
-          <span className="rounded-lg bg-slate-50 px-3 py-2">Stage: {candidate.stage}</span>
-          <span className="rounded-lg bg-slate-50 px-3 py-2">Info: {candidate.documentStatus}</span>
-          <span className="rounded-lg bg-slate-50 px-3 py-2">Next: {formatDate(candidate.nextFollowUpDate)}</span>
+        <div className="mt-4 grid gap-3 text-sm text-[#687184] sm:grid-cols-3">
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Stage: <strong className="text-slate-800">{candidate.stage}</strong></span>
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Info: <strong className="text-slate-800">{candidate.documentStatus}</strong></span>
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Next: <strong className="text-slate-800">{formatDate(candidate.nextFollowUpDate)}</strong></span>
         </div>
-        <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
+        <div className="mt-3 rounded-lg bg-[#EFF6FF] px-3 py-2 text-sm text-blue-900">
           Last contacted: {formatDate(candidate.lastContactedDate)}
         </div>
 
         <textarea
-          className="focus-ring mt-4 min-h-44 w-full rounded-lg border border-slate-200 p-3"
+          className="field-control mt-4 min-h-44 p-3"
           value={message}
           onChange={(event) => {
             setMessage(event.target.value);
@@ -141,7 +142,7 @@ export function MessageGeneratorModal({
             type="button"
             onClick={generate}
             disabled={loading}
-            className="focus-ring inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2 font-bold text-white hover:bg-teal-800 disabled:opacity-60"
+            className="btn-primary focus-ring disabled:opacity-60"
           >
             <Wand2 size={17} />
             {loading ? "Generating..." : message ? "Regenerate" : "Generate"}
@@ -150,12 +151,12 @@ export function MessageGeneratorModal({
             type="button"
             onClick={copyMessage}
             disabled={!message}
-            className="focus-ring inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+            className="btn-secondary focus-ring disabled:opacity-50"
           >
             <Copy size={17} />
             {copied ? "Copied" : "Copy"}
           </button>
-          <span className="text-xs font-semibold text-slate-500">Editable before copying. No automatic sending.</span>
+          <span className="text-xs font-semibold text-[#8A94A6]">Editable before copying. No automatic sending.</span>
         </div>
       </section>
     </div>

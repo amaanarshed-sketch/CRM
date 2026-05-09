@@ -20,13 +20,13 @@ export function ReportsPage() {
     <AppShell>
       <PageHeader title="Weekly Report" kicker={`Snapshot through ${todayISO()}`} />
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <ReportCard label="New leads this week" value={newThisWeek} />
-        <ReportCard label="Follow-ups due" value={candidates.filter(needsFollowUp).length} />
-        <ReportCard label="Stale leads" value={metrics.stale} />
-        <ReportCard label="Info pending" value={metrics.infoPending} />
-        <ReportCard label="Appointments scheduled" value={metrics.appointmentsScheduled} />
-        <ReportCard label="Won leads" value={metrics.won} />
-        <ReportCard label="Lost leads" value={metrics.lost} />
+        <ReportCard label="New leads this week" value={newThisWeek} helper="Fresh opportunities added" />
+        <ReportCard label="Follow-ups due" value={candidates.filter(needsFollowUp).length} helper="Needs team action" tone="amber" />
+        <ReportCard label="Stale leads" value={metrics.stale} helper="Last contact too old" tone="red" />
+        <ReportCard label="Info pending" value={metrics.infoPending} helper="Missing details or requirements" tone="amber" />
+        <ReportCard label="Appointments scheduled" value={metrics.appointmentsScheduled} helper="Booked conversations" />
+        <ReportCard label="Won leads" value={metrics.won} helper="Converted this workspace" tone="green" />
+        <ReportCard label="Lost leads" value={metrics.lost} helper="Closed without conversion" tone="red" />
       </section>
       <section className="grid gap-5 lg:grid-cols-2">
         <Breakdown title="Leads by staff member" rows={byStaff} />
@@ -42,11 +42,19 @@ export function ReportsPage() {
   );
 }
 
-function ReportCard({ label, value }: { label: string; value: number }) {
+function ReportCard({ label, value, helper, tone = "blue" }: { label: string; value: number; helper: string; tone?: "blue" | "amber" | "red" | "green" }) {
+  const toneClass = {
+    blue: "text-blue-700 bg-blue-50",
+    amber: "text-amber-700 bg-amber-50",
+    red: "text-red-700 bg-red-50",
+    green: "text-emerald-700 bg-emerald-50"
+  }[tone];
+
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-3xl font-black text-slate-950">{value}</p>
-      <p className="mt-1 text-sm font-bold text-slate-500">{label}</p>
+    <div className="app-card p-5">
+      <p className={`inline-flex rounded-xl px-3 py-1 text-3xl font-black ${toneClass}`}>{value}</p>
+      <p className="mt-3 text-sm font-black text-[#08090A]">{label}</p>
+      <p className="mt-1 text-xs font-semibold text-[#8A94A6]">{helper}</p>
     </div>
   );
 }
@@ -54,17 +62,18 @@ function ReportCard({ label, value }: { label: string; value: number }) {
 function Breakdown({ title, rows }: { title: string; rows: Record<string, number> }) {
   const max = Math.max(1, ...Object.values(rows));
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-lg font-black text-slate-950">{title}</h2>
+    <div className="app-card p-5">
+      <h2 className="mb-1 text-lg font-black text-[#08090A]">{title}</h2>
+      <p className="mb-4 text-sm text-[#687184]">A quick read on ownership and pipeline balance.</p>
       <div className="space-y-3">
         {Object.entries(rows).map(([label, value]) => (
           <div key={label}>
             <div className="mb-1 flex justify-between text-sm font-bold">
               <span className="text-slate-700">{label}</span>
-              <span className="text-slate-500">{value}</span>
+              <span className="text-[#687184]">{value}</span>
             </div>
-            <div className="h-2 rounded-full bg-slate-100">
-              <div className="h-2 rounded-full bg-teal-600" style={{ width: `${(value / max) * 100}%` }} />
+            <div className="h-2 rounded-full bg-[#F3EADC]">
+              <div className="h-2 rounded-full bg-[#2563EB]" style={{ width: `${(value / max) * 100}%` }} />
             </div>
           </div>
         ))}

@@ -45,20 +45,20 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
   }, [query, rows, stage]);
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <section className="app-card overflow-hidden">
       {showFilters && (
-        <div className="flex flex-col gap-3 border-b border-slate-200 p-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 border-b border-[#D8CCBD]/70 bg-white/70 p-4 md:flex-row md:items-center md:justify-between">
           <label className="relative block md:w-96">
-            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8A94A6]" size={18} />
             <input
-              className="focus-ring w-full rounded-lg border border-slate-200 py-2 pl-10 pr-3"
+              className="field-control py-2 pl-10 pr-3"
               placeholder="Search leads, interest, phone, staff..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
           <select
-            className="focus-ring rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold"
+            className="field-control md:w-56"
             value={stage}
             onChange={(event) => setStage(event.target.value)}
           >
@@ -72,7 +72,7 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
 
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1120px] text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+          <thead className="bg-[#F3EADC]/55 text-xs uppercase tracking-wide text-[#687184]">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Phone</th>
@@ -91,18 +91,18 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
               const stale = isCandidateStale(candidate, staleThreshold);
               const due = needsFollowUp(candidate);
               return (
-                <tr key={candidate.id} className={stale || due ? "bg-amber-50/40" : undefined}>
+                <tr key={candidate.id} className={`transition hover:bg-[#EFF6FF]/50 ${stale ? "bg-red-50/25" : due ? "bg-amber-50/35" : ""}`}>
                   <td className="px-4 py-3">
-                    <Link href={`/candidates/${candidate.id}`} className="font-black text-slate-950 hover:text-teal-700">
+                    <Link href={`/candidates/${candidate.id}`} className="font-black text-[#08090A] hover:text-[#2563EB]">
                       {candidate.fullName || "Unnamed lead"}
                     </Link>
-                    <p className="text-xs text-slate-500">{candidate.email || "No email"}</p>
+                    <p className="text-xs text-[#8A94A6]">{candidate.email || "No email"}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{candidate.phone || "Not set"}</td>
-                  <td className="px-4 py-3 text-slate-700">{candidate.jobInterest || "Not set"}</td>
+                  <td className="px-4 py-3 text-[#687184]">{candidate.phone || "Not set"}</td>
+                  <td className="px-4 py-3 font-semibold text-slate-700">{candidate.jobInterest || "Not set"}</td>
                   <td className="px-4 py-3">
                     <select
-                      className={`focus-ring rounded-lg border px-2 py-1 text-xs font-black ${getStageTone(candidate.stage)}`}
+                      className={`focus-ring rounded-full border px-2.5 py-1 text-xs font-black ${getStageTone(candidate.stage)}`}
                       value={candidate.stage}
                       onChange={(event) => updateCandidate(candidate.id, { stage: event.target.value as PipelineStage })}
                     >
@@ -111,10 +111,10 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
                       ))}
                     </select>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{candidate.assignedStaff || "Unassigned"}</td>
+                  <td className="px-4 py-3 text-[#687184]">{candidate.assignedStaff || "Unassigned"}</td>
                   <td className="px-4 py-3">
                     <input
-                      className="focus-ring w-36 rounded-lg border border-slate-200 px-2 py-1"
+                      className="field-control w-36 px-2 py-1 text-xs"
                       type="date"
                       value={candidate.lastContactedDate}
                       onChange={(event) => updateCandidate(candidate.id, { lastContactedDate: event.target.value })}
@@ -122,31 +122,33 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <input
-                      className={`focus-ring w-36 rounded-lg border px-2 py-1 ${due ? "border-amber-300 bg-amber-50 font-bold text-amber-900" : "border-slate-200"}`}
+                      className={`field-control w-36 px-2 py-1 text-xs ${due ? "border-amber-300 bg-amber-50 font-bold text-amber-900" : ""}`}
                       type="date"
                       value={candidate.nextFollowUpDate}
                       onChange={(event) => updateCandidate(candidate.id, { nextFollowUpDate: event.target.value })}
                     />
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{candidate.documentStatus}</td>
                   <td className="px-4 py-3">
-                    <span className={`status-pill ${stale ? "border-amber-200 bg-amber-50 text-amber-800" : "text-slate-500"}`}>
+                    <span className="status-pill text-[#687184]">{candidate.documentStatus}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`status-pill ${stale ? "border-red-200 bg-red-50 text-red-700" : due ? "border-amber-200 bg-amber-50 text-amber-800" : "text-[#687184]"}`}>
                       {stale ? "Stale" : "Healthy"}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <Link href={`/candidates/${candidate.id}`} className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50" aria-label="View lead">
+                      <Link href={`/candidates/${candidate.id}`} className="btn-secondary p-2" aria-label="View lead">
                         <Eye size={16} />
                       </Link>
                       <GenerateMessageButton candidate={candidate} label="Message" compact />
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
+                      <button onClick={() => updateCandidate(candidate.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 bg-white p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
                         <CheckCircle2 size={16} />
                       </button>
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
+                      <button onClick={() => updateCandidate(candidate.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 bg-white p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
                         <XCircle size={16} />
                       </button>
-                      <button onClick={() => updateCandidate(candidate.id, { lastContactedDate: todayISO() })} className="rounded-lg border border-slate-200 px-2 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">
+                      <button onClick={() => updateCandidate(candidate.id, { lastContactedDate: todayISO() })} className="btn-secondary px-2 py-2 text-xs">
                         Contacted
                       </button>
                     </div>
@@ -158,9 +160,13 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
         </table>
       </div>
       {!filteredRows.length && (
-        <div className="p-8 text-center">
-          <p className="font-bold text-slate-700">No leads found.</p>
-          <p className="text-sm text-slate-500">Add a lead or adjust your filters.</p>
+        <div className="p-6">
+          <div className="empty-state">
+            <p className="font-black text-slate-800">{rows.length ? "No matching leads" : "No leads yet"}</p>
+            <p className="mt-1 text-sm text-[#687184]">
+              {rows.length ? "Try a different search term or stage filter." : "Add your first lead or import a CSV to start tracking follow-ups."}
+            </p>
+          </div>
         </div>
       )}
     </section>

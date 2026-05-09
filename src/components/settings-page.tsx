@@ -28,7 +28,11 @@ export function SettingsPage() {
   return (
     <AppShell>
       <PageHeader title="Settings" kicker="Workspace defaults" />
-      <form onSubmit={handleSubmit} className="grid gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <form onSubmit={handleSubmit} className="app-card grid gap-5 p-5">
+        <div>
+          <h2 className="text-lg font-black text-[#08090A]">Workspace controls</h2>
+          <p className="text-sm text-[#687184]">Set follow-up defaults, stale lead rules, and staff names.</p>
+        </div>
         <div className="grid gap-4 md:grid-cols-3">
           <Field name="agencyName" label="Workspace name" defaultValue={agency?.name || ""} />
           <Field name="staleThresholdDays" label="Default stale threshold in days" type="number" defaultValue={String(agency?.staleThresholdDays || 7)} />
@@ -37,24 +41,26 @@ export function SettingsPage() {
         <label className="block text-sm font-bold text-slate-700">
           Staff names
           <textarea
-            className="focus-ring mt-1 min-h-32 w-full rounded-lg border border-slate-200 px-3 py-2"
+            className="field-control mt-1 min-h-32"
             name="staffNames"
             defaultValue={staffMembers.map((staff) => staff.name).join("\n")}
+            placeholder="One staff member per line"
           />
         </label>
-        <div className="rounded-lg bg-slate-50 p-4">
-          <p className="text-sm font-black text-slate-900">Public lead form link</p>
+        <div className="app-card-soft p-4">
+          <p className="text-sm font-black text-[#08090A]">Public lead form link</p>
+          <p className="mt-1 text-sm text-[#687184]">Share this with leads when you want new inquiries to enter LeadLoop automatically.</p>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-            <input readOnly value={intakeUrl} className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm" />
-            <button type="button" onClick={() => navigator.clipboard?.writeText(intakeUrl)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 hover:bg-white">
+            <input readOnly value={intakeUrl} className="field-control flex-1 text-sm" />
+            <button type="button" onClick={() => navigator.clipboard?.writeText(intakeUrl)} className="btn-secondary">
               <Copy size={16} />
               Copy
             </button>
           </div>
         </div>
-        {saved && <p className="rounded-lg bg-teal-50 px-3 py-2 text-sm font-bold text-teal-800">{saved}</p>}
+        {saved && <p className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-bold text-blue-800">{saved}</p>}
         <div className="flex justify-end">
-          <button className="rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800">Save settings</button>
+          <button className="btn-primary">Save settings</button>
         </div>
       </form>
     </AppShell>
@@ -65,7 +71,7 @@ function Field({ name, label, type = "text", defaultValue }: { name: string; lab
   return (
     <label className="block text-sm font-bold text-slate-700">
       {label}
-      <input className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" name={name} type={type} defaultValue={defaultValue} min={type === "number" ? 1 : undefined} />
+      <input className="field-control mt-1" name={name} type={type} defaultValue={defaultValue} min={type === "number" ? 1 : undefined} />
     </label>
   );
 }

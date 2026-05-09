@@ -47,28 +47,32 @@ export function PublicIntakeForm() {
     <main className="min-h-screen px-4 py-8">
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-lg bg-teal-700 text-white">
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-[#2563EB] text-white">
             <Activity size={22} />
           </span>
           <div>
-            <p className="font-black text-slate-950">{agency?.name || "LeadLoop"}</p>
-            <p className="text-sm text-slate-500">Lead intake form</p>
+            <p className="font-black text-[#08090A]">{agency?.name || "LeadLoop"}</p>
+            <p className="text-sm text-[#687184]">Lead intake form</p>
           </div>
         </div>
 
         {!agency ? (
-          <section className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-            <p className="font-bold text-slate-700">This intake link is not available in this browser workspace.</p>
+          <section className="app-card p-8 text-center">
+            <p className="font-bold text-[#687184]">This intake link is not available in this browser workspace.</p>
           </section>
         ) : submitted ? (
-          <section className="rounded-xl border border-emerald-200 bg-white p-8 text-center shadow-sm">
+          <section className="app-card border-emerald-200 p-8 text-center">
             <CheckCircle2 className="mx-auto text-emerald-600" size={38} />
-            <h1 className="mt-3 text-2xl font-black text-slate-950">Thanks, your details were received.</h1>
-            <p className="mt-2 text-slate-500">The team can now follow up from their dashboard.</p>
+            <h1 className="mt-3 text-2xl font-black text-[#08090A]">Thanks, your details were received.</h1>
+            <p className="mt-2 text-[#687184]">The team can now follow up from their dashboard.</p>
           </section>
         ) : (
-          <form onSubmit={handleSubmit} className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h1 className="text-2xl font-black text-slate-950">Tell us what you are interested in</h1>
+          <form onSubmit={handleSubmit} className="app-card grid gap-4 p-5">
+            <div>
+              <p className="eyebrow">New inquiry</p>
+              <h1 className="mt-1 text-2xl font-black text-[#08090A]">Tell us what you are interested in</h1>
+              <p className="mt-1 text-sm text-[#687184]">Share a few details and the team will follow up with you.</p>
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               <Field name="fullName" label="Full name" required />
               <Field name="phone" label="Phone" required />
@@ -79,10 +83,10 @@ export function PublicIntakeForm() {
             </div>
             <label className="block text-sm font-bold text-slate-700">
               Notes
-              <textarea className="focus-ring mt-1 min-h-28 w-full rounded-lg border border-slate-200 px-3 py-2" name="notes" />
+              <textarea className="field-control mt-1 min-h-28" name="notes" placeholder="Anything the team should know before reaching out?" />
             </label>
             {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm font-bold text-rose-700">{error}</p>}
-            <button disabled={submitting} className="rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800 disabled:opacity-60">
+            <button disabled={submitting} className="btn-primary disabled:opacity-60">
               {submitting ? "Submitting..." : "Submit details"}
             </button>
           </form>
@@ -96,7 +100,7 @@ function Field({ name, label, type = "text", required }: { name: string; label: 
   return (
     <label className="block text-sm font-bold text-slate-700">
       {label}
-      <input className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" name={name} type={type} required={required} />
+      <input className="field-control mt-1" name={name} type={type} required={required} />
     </label>
   );
 }

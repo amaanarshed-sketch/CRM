@@ -38,7 +38,11 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <form onSubmit={handleSubmit} className="app-card grid gap-5 p-5">
+      <div>
+        <h2 className="text-lg font-black text-[#08090A]">Lead information</h2>
+        <p className="text-sm text-[#687184]">Keep the contact, interest, owner, and next action in one place.</p>
+      </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Field name="fullName" label="Full name" defaultValue={initial.fullName} required />
         <Field name="phone" label="Phone number" defaultValue={initial.phone} />
@@ -49,7 +53,7 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: 
         <label className="block text-sm font-bold text-slate-700">
           Assigned staff
           <input
-            className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2"
+            className="field-control mt-1"
             name="assignedStaff"
             list="staff-members"
             defaultValue={initial.assignedStaff}
@@ -69,13 +73,14 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: 
       <label className="block text-sm font-bold text-slate-700">
         Notes
         <textarea
-          className="focus-ring mt-1 min-h-32 w-full rounded-lg border border-slate-200 px-3 py-2"
+          className="field-control mt-1 min-h-32"
           name="notes"
           defaultValue={initial.notes}
+          placeholder="Add context from calls, WhatsApp chats, objections, quote details, or next steps."
         />
       </label>
       <div className="flex justify-end">
-        <button className="focus-ring rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800">
+        <button className="btn-primary focus-ring">
           {submitLabel}
         </button>
       </div>
@@ -100,7 +105,7 @@ function Field({
     <label className="block text-sm font-bold text-slate-700">
       {label}
       <input
-        className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2"
+        className="field-control mt-1"
         name={name}
         type={type}
         defaultValue={defaultValue}
@@ -124,7 +129,7 @@ function Select({
   return (
     <label className="block text-sm font-bold text-slate-700">
       {label}
-      <select className="focus-ring mt-1 w-full rounded-lg border border-slate-200 px-3 py-2" name={name} defaultValue={defaultValue}>
+      <select className="field-control mt-1" name={name} defaultValue={defaultValue}>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
