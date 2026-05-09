@@ -7,7 +7,7 @@ import {
   PipelineStage
 } from "./types";
 
-export const TERMINAL_STAGES: PipelineStage[] = ["Placed", "Rejected"];
+export const TERMINAL_STAGES: PipelineStage[] = ["Won", "Lost"];
 
 export function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -43,7 +43,18 @@ export function needsFollowUp(candidate: Candidate) {
 }
 
 export function normalizeStage(value?: string): PipelineStage {
-  const match = PIPELINE_STAGES.find((stage) => stage.toLowerCase() === (value || "").trim().toLowerCase());
+  const raw = (value || "").trim().toLowerCase();
+  const legacyMap: Record<string, PipelineStage> = {
+    "documents pending": "Follow-up Due",
+    screened: "Interested",
+    "interview scheduled": "Appointment Scheduled",
+    "client feedback pending": "Proposal Sent",
+    selected: "Interested",
+    placed: "Won",
+    rejected: "Lost"
+  };
+  if (legacyMap[raw]) return legacyMap[raw];
+  const match = PIPELINE_STAGES.find((stage) => stage.toLowerCase() === raw);
   return match || "New";
 }
 
@@ -76,10 +87,10 @@ export function computeMetrics(candidates: Candidate[], staleThresholdDays: numb
     active: active.length,
     followUpsDue: candidates.filter(needsFollowUp).length,
     stale: candidates.filter((candidate) => isCandidateStale(candidate, staleThresholdDays)).length,
-    documentsPending: candidates.filter((candidate) => candidate.documentStatus !== "Complete").length,
-    interviewsScheduled: candidates.filter((candidate) => candidate.stage === "Interview Scheduled").length,
-    placed: candidates.filter((candidate) => candidate.stage === "Placed").length,
-    rejected: candidates.filter((candidate) => candidate.stage === "Rejected").length
+    infoPending: candidates.filter((candidate) => candidate.documentStatus !== "Complete").length,
+    appointmentsScheduled: candidates.filter((candidate) => candidate.stage === "Appointment Scheduled").length,
+    won: candidates.filter((candidate) => candidate.stage === "Won").length,
+    lost: candidates.filter((candidate) => candidate.stage === "Lost").length
   };
 }
 
@@ -99,11 +110,11 @@ export function formatDate(date?: string) {
 }
 
 export function getStageTone(stage: PipelineStage) {
-  if (stage === "Placed") return "bg-emerald-50 text-emerald-700 border-emerald-200";
-  if (stage === "Rejected") return "bg-rose-50 text-rose-700 border-rose-200";
+  if (stage === "Won") return "bg-emerald-50 text-emerald-700 border-emerald-200";
+  if (stage === "Lost") return "bg-rose-50 text-rose-700 border-rose-200";
   if (stage === "Stale") return "bg-amber-50 text-amber-800 border-amber-200";
-  if (stage.includes("Pending")) return "bg-orange-50 text-orange-700 border-orange-200";
-  if (stage.includes("Interview")) return "bg-blue-50 text-blue-700 border-blue-200";
+  if (stage.includes("Due") || stage.includes("Proposal")) return "bg-orange-50 text-orange-700 border-orange-200";
+  if (stage.includes("Appointment")) return "bg-blue-50 text-blue-700 border-blue-200";
   return "bg-slate-50 text-slate-700 border-slate-200";
 }
 

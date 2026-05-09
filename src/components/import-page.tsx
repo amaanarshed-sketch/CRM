@@ -18,19 +18,19 @@ export function ImportPage() {
     const text = await file.text();
     const rows = parseCandidateCSV(text);
     setPreview(rows);
-    setMessage(`${rows.length} candidate rows ready to import.`);
+    setMessage(`${rows.length} lead rows ready to import.`);
   }
 
   return (
     <AppShell>
-      <PageHeader title="Import CSV" kicker="Bulk candidate intake" />
+      <PageHeader title="Import CSV" kicker="Bulk lead intake" />
       <section className="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="grid gap-5 lg:grid-cols-[1fr_1.2fr]">
           <div>
-            <h2 className="text-lg font-black text-slate-950">Upload candidate CSV</h2>
+            <h2 className="text-lg font-black text-slate-950">Upload lead CSV</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Supported headers: full_name, phone, email, source, job_interest, location, assigned_staff, stage,
-              last_contacted_date, next_follow_up_date, document_status, notes.
+              Supported headers: full_name, phone, email, source, interest, location, assigned_staff, stage,
+              last_contacted_date, next_follow_up_date, info_status, notes.
             </p>
             <label className="mt-4 flex cursor-pointer items-center justify-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-8 text-center font-bold text-slate-700 hover:border-teal-300 hover:bg-teal-50">
               <FileUp size={22} />
@@ -42,7 +42,7 @@ export function ImportPage() {
           <div className="rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
             <p className="font-black text-slate-900">Example header</p>
             <code className="mt-2 block overflow-x-auto rounded-lg bg-white p-3 text-xs">
-              full_name,phone,email,source,job_interest,location,assigned_staff,stage,last_contacted_date,next_follow_up_date,document_status,notes
+              full_name,phone,email,source,interest,location,assigned_staff,stage,last_contacted_date,next_follow_up_date,info_status,notes
             </code>
           </div>
         </div>
@@ -52,11 +52,11 @@ export function ImportPage() {
             onClick={async () => {
               const count = await importCandidates(preview);
               setPreview([]);
-              setMessage(`Imported ${count} candidates.`);
+              setMessage(`Imported ${count} leads.`);
             }}
             className="rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800 disabled:opacity-50"
           >
-            Import candidates
+            Import leads
           </button>
         </div>
       </section>

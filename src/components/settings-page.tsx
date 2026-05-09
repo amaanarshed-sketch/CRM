@@ -27,10 +27,10 @@ export function SettingsPage() {
 
   return (
     <AppShell>
-      <PageHeader title="Settings" kicker="Agency defaults" />
+      <PageHeader title="Settings" kicker="Workspace defaults" />
       <form onSubmit={handleSubmit} className="grid gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 md:grid-cols-3">
-          <Field name="agencyName" label="Agency name" defaultValue={agency?.name || ""} />
+          <Field name="agencyName" label="Workspace name" defaultValue={agency?.name || ""} />
           <Field name="staleThresholdDays" label="Default stale threshold in days" type="number" defaultValue={String(agency?.staleThresholdDays || 7)} />
           <Field name="defaultFollowUpDays" label="Default follow-up timing in days" type="number" defaultValue={String(agency?.defaultFollowUpDays || 2)} />
         </div>
@@ -43,7 +43,7 @@ export function SettingsPage() {
           />
         </label>
         <div className="rounded-lg bg-slate-50 p-4">
-          <p className="text-sm font-black text-slate-900">Public intake form link</p>
+          <p className="text-sm font-black text-slate-900">Public lead form link</p>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row">
             <input readOnly value={intakeUrl} className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm" />
             <button type="button" onClick={() => navigator.clipboard?.writeText(intakeUrl)} className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 hover:bg-white">

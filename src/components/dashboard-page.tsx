@@ -27,19 +27,19 @@ export function DashboardPage() {
         title="Who needs follow-up right now?"
         action={
           <Link href="/candidates" className="rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800">
-            Add or update candidates
+            Add or update leads
           </Link>
         }
       />
 
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Active candidates" value={metrics.active} icon={<Users size={20} />} />
-        <MetricCard label="Follow-up due today" value={metrics.followUpsDue} icon={<CalendarClock size={20} />} urgent />
-        <MetricCard label="Stale candidates" value={metrics.stale} icon={<AlertTriangle size={20} />} urgent />
-        <MetricCard label="Documents pending" value={metrics.documentsPending} icon={<FileWarning size={20} />} />
-        <MetricCard label="Interviews scheduled" value={metrics.interviewsScheduled} icon={<CalendarClock size={20} />} />
-        <MetricCard label="Placed candidates" value={metrics.placed} icon={<Trophy size={20} />} success />
-        <MetricCard label="Rejected/lost" value={metrics.rejected} icon={<UserX size={20} />} />
+        <MetricCard label="Active leads" value={metrics.active} icon={<Users size={20} />} />
+        <MetricCard label="Follow-ups due" value={metrics.followUpsDue} icon={<CalendarClock size={20} />} urgent />
+        <MetricCard label="Stale leads" value={metrics.stale} icon={<AlertTriangle size={20} />} urgent />
+        <MetricCard label="Info pending" value={metrics.infoPending} icon={<FileWarning size={20} />} />
+        <MetricCard label="Appointments scheduled" value={metrics.appointmentsScheduled} icon={<CalendarClock size={20} />} />
+        <MetricCard label="Won leads" value={metrics.won} icon={<Trophy size={20} />} success />
+        <MetricCard label="Lost leads" value={metrics.lost} icon={<UserX size={20} />} />
         <MetricCard label="Recovery priority" value={metrics.followUpsDue + metrics.stale} icon={<CheckCircle2 size={20} />} urgent={metrics.followUpsDue + metrics.stale > 0} />
       </section>
 
@@ -48,7 +48,7 @@ export function DashboardPage() {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-black text-amber-950">Follow-up due now</h2>
-              <p className="text-sm text-amber-800">Candidates with next follow-up today or earlier.</p>
+              <p className="text-sm text-amber-800">Leads with next follow-up today or earlier.</p>
             </div>
             <Link href="/follow-ups" className="text-sm font-black text-amber-900 hover:underline">
               View all
@@ -59,7 +59,7 @@ export function DashboardPage() {
               <Link key={candidate.id} href={`/candidates/${candidate.id}`} className="flex items-center justify-between rounded-lg bg-white p-3 shadow-sm hover:ring-2 hover:ring-amber-200">
                 <span>
                   <strong className="block text-slate-950">{candidate.fullName}</strong>
-                  <span className="text-sm text-slate-500">{candidate.jobInterest || "No role"} - {candidate.phone || "No phone"}</span>
+                  <span className="text-sm text-slate-500">{candidate.jobInterest || "No interest"} - {candidate.phone || "No phone"}</span>
                 </span>
                 <span className="text-right text-sm font-black text-amber-800">{formatDate(candidate.nextFollowUpDate)}</span>
               </Link>
@@ -88,13 +88,13 @@ export function DashboardPage() {
                 <span className="status-pill border-rose-200 bg-rose-50 text-rose-700">{candidate.stage}</span>
               </Link>
             ))}
-            {!staleRows.length && <p className="rounded-lg bg-slate-50 p-4 text-sm font-semibold text-slate-600">No stale candidates under the current threshold.</p>}
+            {!staleRows.length && <p className="rounded-lg bg-slate-50 p-4 text-sm font-semibold text-slate-600">No stale leads under the current threshold.</p>}
           </div>
         </div>
       </section>
 
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xl font-black text-slate-950">Recent candidates</h2>
+        <h2 className="text-xl font-black text-slate-950">Recent leads</h2>
         <Link href="/candidates" className="text-sm font-black text-teal-700 hover:underline">
           Manage all
         </Link>

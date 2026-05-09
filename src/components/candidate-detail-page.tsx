@@ -20,8 +20,8 @@ export function CandidateDetailPage() {
   return (
     <AppShell>
       <PageHeader
-        title={candidate?.fullName || "Candidate not found"}
-        kicker="Candidate detail"
+        title={candidate?.fullName || "Lead not found"}
+        kicker="Lead detail"
         action={
           <div className="flex flex-wrap gap-2">
             {candidate && <GenerateMessageButton candidate={candidate} />}
@@ -35,13 +35,13 @@ export function CandidateDetailPage() {
 
       {!candidate ? (
         <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <p className="font-bold text-slate-700">This candidate is not in the current agency workspace.</p>
+          <p className="font-bold text-slate-700">This lead is not in the current workspace.</p>
         </div>
       ) : (
         <div className="grid gap-6">
           <section className="grid gap-4 md:grid-cols-3">
             <SignalCard icon={<CalendarClock size={20} />} title="Follow-up" value={due ? "Due now" : formatDate(candidate.nextFollowUpDate)} active={Boolean(due)} />
-            <SignalCard icon={<Siren size={20} />} title="Stale status" value={stale ? "Stale candidate" : "Not stale"} active={Boolean(stale)} />
+            <SignalCard icon={<Siren size={20} />} title="Stale status" value={stale ? "Stale lead" : "Not stale"} active={Boolean(stale)} />
             <SignalCard title="Pipeline stage" value={candidate.stage} />
           </section>
 
@@ -55,7 +55,7 @@ export function CandidateDetailPage() {
               }}
               className="rounded-lg border border-rose-200 px-4 py-2 font-bold text-rose-700 hover:bg-rose-50"
             >
-              Delete candidate
+              Delete lead
             </button>
           </div>
         </div>

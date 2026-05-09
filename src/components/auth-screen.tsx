@@ -37,15 +37,15 @@ export function AuthScreen() {
           <span className="grid h-10 w-10 place-items-center rounded-lg bg-teal-500 text-white">
             <Activity size={22} />
           </span>
-          Candidate Recovery OS
+          LeadLoop
         </div>
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-200">Recruitment follow-up control</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-200">Sales follow-up control</p>
           <h1 className="mt-5 text-5xl font-bold leading-tight">
-            See which candidates are going cold before you lose the placement.
+            Track every lead before the opportunity goes cold.
           </h1>
           <p className="mt-5 max-w-xl text-lg text-slate-300">
-            A focused workspace for stale candidates, document gaps, due follow-ups, and pipeline clarity.
+            A lightweight CRM for follow-ups, notes, assigned staff, stale leads, and won or lost outcomes.
           </p>
         </div>
         <div className="grid grid-cols-3 gap-4 text-sm text-slate-300">
@@ -55,7 +55,7 @@ export function AuthScreen() {
           </div>
           <div className="rounded-lg border border-white/10 p-4">
             <strong className="block text-white">Stale alerts</strong>
-            Based on your agency threshold.
+            Based on your workspace threshold.
           </div>
           <div className="rounded-lg border border-white/10 p-4">
             <strong className="block text-white">Copy-ready messages</strong>
@@ -71,7 +71,7 @@ export function AuthScreen() {
             </span>
             <div>
               <h2 className="text-xl font-bold text-slate-950">{mode === "signup" ? "Create workspace" : "Log in"}</h2>
-              <p className="text-sm text-slate-500">Agency data stays scoped to the signed-in account.</p>
+              <p className="text-sm text-slate-500">Workspace data stays scoped to the signed-in account.</p>
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export function AuthScreen() {
           {mode === "signup" && (
             <>
               <Field name="fullName" label="Your name" />
-              <Field name="agencyName" label="Agency name" />
+              <Field name="agencyName" label="Workspace name" />
             </>
           )}
           <Field name="email" label="Email" type="email" />

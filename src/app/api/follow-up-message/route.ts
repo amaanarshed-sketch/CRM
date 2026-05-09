@@ -28,17 +28,17 @@ export async function POST(request: Request) {
           {
             role: "system",
             content:
-              "Write concise, professional recruitment follow-up messages for WhatsApp or email. Keep it short, friendly, and copy-ready. Never claim a message was sent. Return only the message text."
+              "Write concise, professional sales follow-up messages for WhatsApp or email. Keep it short, friendly, and copy-ready. Never claim a message was sent. Return only the message text."
           },
           {
             role: "user",
             content: JSON.stringify({
               messageType: body.kind,
-              candidate: {
+              lead: {
                 name: body.candidate.fullName,
                 stage: body.candidate.stage,
-                jobInterest: body.candidate.jobInterest,
-                documentStatus: body.candidate.documentStatus,
+                interest: body.candidate.jobInterest,
+                infoStatus: body.candidate.documentStatus,
                 lastContactedDate: body.candidate.lastContactedDate,
                 nextFollowUpDate: body.candidate.nextFollowUpDate,
                 notes: body.candidate.notes
@@ -64,20 +64,22 @@ export async function POST(request: Request) {
 
 function templateMessage(kind: FollowUpKind, candidate: Candidate) {
   const name = candidate.fullName || "there";
-  const role = candidate.jobInterest || "the role";
+  const interest = candidate.jobInterest || "your inquiry";
   const lastContact = formatDate(candidate.lastContactedDate);
   const nextFollowUp = formatDate(candidate.nextFollowUpDate);
-  const docStatus = candidate.documentStatus || "Not requested";
+  const infoStatus = candidate.documentStatus || "Not requested";
   const notes = candidate.notes ? `\n\nContext: ${candidate.notes}` : "";
 
   const templates: Record<FollowUpKind, string> = {
-    "First follow-up": `Hi ${name}, thanks for your interest in ${role}. Are you still open to a quick chat about the next steps? Let me know a good time today or tomorrow.${notes}`,
-    "Document reminder": `Hi ${name}, quick reminder to send the pending documents for ${role}. Current document status: ${docStatus}. Once received, we can keep your application moving.${notes}`,
-    "Interview reminder": `Hi ${name}, this is a quick reminder about the interview stage for ${role}. Please confirm your availability, and let me know if anything has changed.${notes}`,
-    "No-response follow-up": `Hi ${name}, I tried reaching you after our last contact on ${lastContact}. Are you still interested in ${role}? A quick yes or no is completely fine.${notes}`,
-    "Stale candidate reactivation": `Hi ${name}, checking back in about ${role}. We last connected on ${lastContact}. If you are still exploring opportunities, I would be happy to restart the conversation.${notes}`,
-    "Client feedback pending follow-up": `Hi ${name}, quick update: your profile for ${role} is still at the client feedback stage. I will share news as soon as I have it. Please let me know if your availability has changed.${notes}`,
-    "Final soft follow-up": `Hi ${name}, I wanted to do one final check-in about ${role}. Your next follow-up was marked for ${nextFollowUp}. If you are still interested, reply when convenient and I will help with next steps.${notes}`
+    "First follow-up": `Hi ${name}, thanks for your interest in ${interest}. Are you still open to a quick chat about the next steps? Let me know a good time today or tomorrow.${notes}`,
+    "Appointment reminder": `Hi ${name}, quick reminder about our appointment for ${interest}. Please confirm if the time still works for you, or let me know if we should reschedule.${notes}`,
+    "Info request": `Hi ${name}, quick follow-up on ${interest}. I just need a little more information to help you properly. Current info status: ${infoStatus}. Could you send the missing details when convenient?${notes}`,
+    "Proposal follow-up": `Hi ${name}, checking in on the proposal/details we shared for ${interest}. Any questions or changes you would like us to adjust?${notes}`,
+    "Reactivation message": `Hi ${name}, checking back in about ${interest}. We last connected on ${lastContact}. If this is still relevant, I would be happy to pick things back up.${notes}`,
+    "Won lead thank-you": `Hi ${name}, thank you for choosing us for ${interest}. We appreciate it and will keep you updated on the next steps.${notes}`,
+    "Lost lead polite close": `Hi ${name}, just closing the loop on ${interest}. No worries if the timing is not right now. If anything changes, feel free to message us anytime.${notes}`,
+    "No-response follow-up": `Hi ${name}, I tried reaching you after our last contact on ${lastContact}. Are you still interested in ${interest}? A quick yes or no is completely fine.${notes}`,
+    "Stale lead reactivation": `Hi ${name}, checking back in about ${interest}. Your follow-up was marked for ${nextFollowUp}. If you are still interested, reply when convenient and I can help with next steps.${notes}`
   };
 
   return templates[kind];

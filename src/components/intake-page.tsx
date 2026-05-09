@@ -11,11 +11,11 @@ export function IntakePage() {
 
   return (
     <AppShell>
-      <PageHeader title="Intake Form" kicker="Public candidate link" />
+      <PageHeader title="Lead Form" kicker="Public lead intake link" />
       <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-black text-slate-950">Share this link with candidates</h2>
+        <h2 className="text-lg font-black text-slate-950">Share this link with leads</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Submissions enter your agency database as stage New. No messages are sent automatically.
+          Submissions enter your workspace as stage New. No messages are sent automatically.
         </p>
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
           <input readOnly value={url} className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" />

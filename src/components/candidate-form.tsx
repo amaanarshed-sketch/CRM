@@ -11,7 +11,7 @@ type Props = {
   submitLabel?: string;
 };
 
-export function CandidateForm({ candidate, onSave, submitLabel = "Save candidate" }: Props) {
+export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: Props) {
   const { staffMembers } = useApp();
   const initial = makeCandidateInput(candidate || {});
 
@@ -44,7 +44,7 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save candidate
         <Field name="phone" label="Phone number" defaultValue={initial.phone} />
         <Field name="email" label="Email" type="email" defaultValue={initial.email} />
         <Field name="source" label="Source" defaultValue={initial.source} />
-        <Field name="jobInterest" label="Job/role interest" defaultValue={initial.jobInterest} />
+        <Field name="jobInterest" label="Lead interest" defaultValue={initial.jobInterest} />
         <Field name="location" label="Location" defaultValue={initial.location} />
         <label className="block text-sm font-bold text-slate-700">
           Assigned staff
@@ -63,8 +63,8 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save candidate
         <Select name="stage" label="Pipeline stage" defaultValue={initial.stage} options={PIPELINE_STAGES} />
         <Field name="lastContactedDate" label="Last contacted" type="date" defaultValue={initial.lastContactedDate} />
         <Field name="nextFollowUpDate" label="Next follow-up" type="date" defaultValue={initial.nextFollowUpDate} />
-        <Select name="documentStatus" label="Document status" defaultValue={initial.documentStatus} options={DOCUMENT_STATUSES} />
-        <Field name="experience" label="Experience" defaultValue={initial.experience || ""} />
+        <Select name="documentStatus" label="Info status" defaultValue={initial.documentStatus} options={DOCUMENT_STATUSES} />
+        <Field name="experience" label="Context" defaultValue={initial.experience || ""} />
       </div>
       <label className="block text-sm font-bold text-slate-700">
         Notes

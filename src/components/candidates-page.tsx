@@ -14,19 +14,19 @@ export function CandidatesPage() {
   return (
     <AppShell>
       <PageHeader
-        title="Candidates"
-        kicker="Pipeline database"
+        title="Leads"
+        kicker="Lead database"
         action={
           <button onClick={() => setAdding((value) => !value)} className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 font-bold text-white hover:bg-teal-800">
             <Plus size={18} />
-            {adding ? "Close form" : "Add candidate"}
+            {adding ? "Close form" : "Add lead"}
           </button>
         }
       />
       {adding && (
         <div className="mb-6">
           <CandidateForm
-            submitLabel="Create candidate"
+            submitLabel="Create lead"
             onSave={(input) => {
               addCandidate(input);
               setAdding(false);

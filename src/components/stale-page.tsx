@@ -12,7 +12,7 @@ export function StalePage() {
 
   return (
     <AppShell>
-      <PageHeader title="Stale Candidates" kicker={`No contact in more than ${threshold} days`} />
+      <PageHeader title="Stale Leads" kicker={`No contact in more than ${threshold} days`} />
       <CandidateTable rows={rows} />
     </AppShell>
   );

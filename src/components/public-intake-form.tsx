@@ -51,8 +51,8 @@ export function PublicIntakeForm() {
             <Activity size={22} />
           </span>
           <div>
-            <p className="font-black text-slate-950">{agency?.name || "Candidate Recovery OS"}</p>
-            <p className="text-sm text-slate-500">Candidate intake form</p>
+            <p className="font-black text-slate-950">{agency?.name || "LeadLoop"}</p>
+            <p className="text-sm text-slate-500">Lead intake form</p>
           </div>
         </div>
 
@@ -64,18 +64,18 @@ export function PublicIntakeForm() {
           <section className="rounded-xl border border-emerald-200 bg-white p-8 text-center shadow-sm">
             <CheckCircle2 className="mx-auto text-emerald-600" size={38} />
             <h1 className="mt-3 text-2xl font-black text-slate-950">Thanks, your details were received.</h1>
-            <p className="mt-2 text-slate-500">The recruitment team can now follow up from their dashboard.</p>
+            <p className="mt-2 text-slate-500">The team can now follow up from their dashboard.</p>
           </section>
         ) : (
           <form onSubmit={handleSubmit} className="grid gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h1 className="text-2xl font-black text-slate-950">Tell us about your job search</h1>
+            <h1 className="text-2xl font-black text-slate-950">Tell us what you are interested in</h1>
             <div className="grid gap-4 md:grid-cols-2">
               <Field name="fullName" label="Full name" required />
               <Field name="phone" label="Phone" required />
               <Field name="email" label="Email" type="email" />
               <Field name="location" label="Location" />
-              <Field name="jobInterest" label="Job/role interest" required />
-              <Field name="experience" label="Experience" />
+              <Field name="jobInterest" label="Interest" required />
+              <Field name="experience" label="Context" />
             </div>
             <label className="block text-sm font-bold text-slate-700">
               Notes

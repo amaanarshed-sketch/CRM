@@ -28,8 +28,8 @@ type AppContextValue = {
   replaceStaff: (names: string[]) => Promise<void>;
 };
 
-const DEMO_SESSION_KEY = "candidate-recovery-os:demo-session";
-const DEMO_AGENCY_ID = "demo-agency";
+const DEMO_SESSION_KEY = "leadloop:demo-session";
+const DEMO_AGENCY_ID = "demo-workspace";
 
 const emptyAgencyData = {
   agency: null as Agency | null,
@@ -155,7 +155,7 @@ function buildDemoData() {
   const now = new Date().toISOString();
   const agency: Agency = {
     id: DEMO_AGENCY_ID,
-    name: "Northstar Recruitment",
+    name: "LeadLoop Demo Team",
     staleThresholdDays: 7,
     defaultFollowUpDays: 2,
     createdAt: now
@@ -163,8 +163,8 @@ function buildDemoData() {
   const user: Profile = {
     id: "demo-user",
     agencyId: agency.id,
-    fullName: "Demo Recruiter",
-    email: "demo@candidate-recovery.local",
+    fullName: "Demo Sales Rep",
+    email: "demo@leadloop.local",
     password: "",
     createdAt: now
   };
@@ -181,15 +181,15 @@ function buildDemoData() {
       fullName: "Sarah Ahmed",
       phone: "+94 77 123 4567",
       email: "sarah@example.com",
-      source: "LinkedIn",
-      jobInterest: "Senior Accountant",
+      source: "Instagram DM",
+      jobInterest: "Salon bridal package inquiry",
       location: "Colombo",
       assignedStaff: "Priya",
-      stage: "Documents Pending",
+      stage: "Follow-up Due",
       lastContactedDate: "2026-04-28",
       nextFollowUpDate: "2026-05-06",
       documentStatus: "Partial",
-      notes: "Waiting on updated CV and degree certificate.",
+      notes: "Asked for package options and available dates. Needs pricing details.",
       createdAt: now,
       updatedAt: now
     },
@@ -200,14 +200,14 @@ function buildDemoData() {
       phone: "+94 71 555 0199",
       email: "daniel@example.com",
       source: "Referral",
-      jobInterest: "Frontend Developer",
+      jobInterest: "Restaurant private event inquiry",
       location: "Kandy",
       assignedStaff: "Amaan",
-      stage: "Interview Scheduled",
+      stage: "Appointment Scheduled",
       lastContactedDate: "2026-05-08",
       nextFollowUpDate: "2026-05-09",
       documentStatus: "Complete",
-      notes: "Interview booked with client. Confirm final time.",
+      notes: "Call booked to confirm guest count and menu preference.",
       createdAt: now,
       updatedAt: now
     },
@@ -218,14 +218,14 @@ function buildDemoData() {
       phone: "+94 76 888 4422",
       email: "nadeesha@example.com",
       source: "Website",
-      jobInterest: "HR Executive",
+      jobInterest: "Real estate buyer lead",
       location: "Galle",
       assignedStaff: "Maya",
-      stage: "Client Feedback Pending",
+      stage: "Proposal Sent",
       lastContactedDate: "2026-04-25",
       nextFollowUpDate: "2026-05-03",
       documentStatus: "Complete",
-      notes: "Strong profile. Client feedback delayed.",
+      notes: "Sent apartment options. Waiting for feedback on budget and viewing time.",
       createdAt: now,
       updatedAt: now
     },
@@ -236,14 +236,14 @@ function buildDemoData() {
       phone: "+94 75 777 2200",
       email: "rizwan@example.com",
       source: "CSV import",
-      jobInterest: "Sales Manager",
+      jobInterest: "B2B agency service lead",
       location: "Negombo",
       assignedStaff: "Priya",
       stage: "Contacted",
       lastContactedDate: "2026-05-02",
       nextFollowUpDate: "2026-05-10",
       documentStatus: "Requested",
-      notes: "Interested, asked for salary range.",
+      notes: "Interested in monthly marketing support. Asked for a simple proposal.",
       createdAt: now,
       updatedAt: now
     }

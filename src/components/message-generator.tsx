@@ -7,12 +7,14 @@ import { Candidate, FollowUpKind } from "@/lib/types";
 
 const messageTypes: FollowUpKind[] = [
   "First follow-up",
-  "Document reminder",
-  "Interview reminder",
+  "Appointment reminder",
+  "Info request",
+  "Proposal follow-up",
+  "Reactivation message",
+  "Won lead thank-you",
+  "Lost lead polite close",
   "No-response follow-up",
-  "Stale candidate reactivation",
-  "Client feedback pending follow-up",
-  "Final soft follow-up"
+  "Stale lead reactivation"
 ];
 
 export function GenerateMessageButton({
@@ -118,7 +120,7 @@ export function MessageGeneratorModal({
 
         <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
           <span className="rounded-lg bg-slate-50 px-3 py-2">Stage: {candidate.stage}</span>
-          <span className="rounded-lg bg-slate-50 px-3 py-2">Docs: {candidate.documentStatus}</span>
+          <span className="rounded-lg bg-slate-50 px-3 py-2">Info: {candidate.documentStatus}</span>
           <span className="rounded-lg bg-slate-50 px-3 py-2">Next: {formatDate(candidate.nextFollowUpDate)}</span>
         </div>
         <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">

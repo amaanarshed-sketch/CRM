@@ -1,13 +1,12 @@
 export const PIPELINE_STAGES = [
   "New",
   "Contacted",
-  "Documents Pending",
-  "Screened",
-  "Interview Scheduled",
-  "Client Feedback Pending",
-  "Selected",
-  "Placed",
-  "Rejected",
+  "Follow-up Due",
+  "Interested",
+  "Appointment Scheduled",
+  "Proposal Sent",
+  "Won",
+  "Lost",
   "Stale"
 ] as const;
 
@@ -70,12 +69,14 @@ export type Candidate = {
 
 export type FollowUpKind =
   | "First follow-up"
-  | "Document reminder"
-  | "Interview reminder"
+  | "Appointment reminder"
+  | "Info request"
+  | "Proposal follow-up"
+  | "Reactivation message"
+  | "Won lead thank-you"
+  | "Lost lead polite close"
   | "No-response follow-up"
-  | "Stale candidate reactivation"
-  | "Client feedback pending follow-up"
-  | "Final soft follow-up";
+  | "Stale lead reactivation";
 
 export type AppData = {
   agencies: Agency[];

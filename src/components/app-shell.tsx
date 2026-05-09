@@ -19,11 +19,11 @@ import { AuthScreen } from "./auth-screen";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/candidates", label: "Candidates", icon: Users },
+  { href: "/candidates", label: "Leads", icon: Users },
   { href: "/follow-ups", label: "Follow-ups", icon: CalendarClock },
-  { href: "/stale", label: "Stale Candidates", icon: Siren },
+  { href: "/stale", label: "Stale Leads", icon: Siren },
   { href: "/import", label: "Import CSV", icon: FileUp },
-  { href: "/intake", label: "Intake Form", icon: FormInput },
+  { href: "/intake", label: "Lead Form", icon: FormInput },
   { href: "/reports", label: "Reports", icon: BarChart3 },
   { href: "/settings", label: "Settings", icon: Settings }
 ];
@@ -44,8 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Activity size={22} />
             </span>
             <span>
-              <span className="block leading-tight">Candidate</span>
-              <span className="block leading-tight">Recovery OS</span>
+              <span className="block leading-tight">LeadLoop</span>
             </span>
           </Link>
           <button onClick={logout} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden" aria-label="Log out">

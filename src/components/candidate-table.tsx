@@ -52,7 +52,7 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input
               className="focus-ring w-full rounded-lg border border-slate-200 py-2 pl-10 pr-3"
-              placeholder="Search candidates, role, phone, staff..."
+              placeholder="Search leads, interest, phone, staff..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
@@ -76,12 +76,12 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Phone</th>
-              <th className="px-4 py-3">Job interest</th>
+              <th className="px-4 py-3">Interest</th>
               <th className="px-4 py-3">Stage</th>
               <th className="px-4 py-3">Assigned staff</th>
               <th className="px-4 py-3">Last contacted</th>
               <th className="px-4 py-3">Next follow-up</th>
-              <th className="px-4 py-3">Document status</th>
+              <th className="px-4 py-3">Info status</th>
               <th className="px-4 py-3">Stale</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
@@ -94,7 +94,7 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
                 <tr key={candidate.id} className={stale || due ? "bg-amber-50/40" : undefined}>
                   <td className="px-4 py-3">
                     <Link href={`/candidates/${candidate.id}`} className="font-black text-slate-950 hover:text-teal-700">
-                      {candidate.fullName || "Unnamed candidate"}
+                      {candidate.fullName || "Unnamed lead"}
                     </Link>
                     <p className="text-xs text-slate-500">{candidate.email || "No email"}</p>
                   </td>
@@ -136,14 +136,14 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <Link href={`/candidates/${candidate.id}`} className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50" aria-label="View candidate">
+                      <Link href={`/candidates/${candidate.id}`} className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50" aria-label="View lead">
                         <Eye size={16} />
                       </Link>
                       <GenerateMessageButton candidate={candidate} label="Message" compact />
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Placed", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark placed">
+                      <button onClick={() => updateCandidate(candidate.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
                         <CheckCircle2 size={16} />
                       </button>
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Rejected", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark rejected">
+                      <button onClick={() => updateCandidate(candidate.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
                         <XCircle size={16} />
                       </button>
                       <button onClick={() => updateCandidate(candidate.id, { lastContactedDate: todayISO() })} className="rounded-lg border border-slate-200 px-2 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">
@@ -159,8 +159,8 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
       </div>
       {!filteredRows.length && (
         <div className="p-8 text-center">
-          <p className="font-bold text-slate-700">No candidates found.</p>
-          <p className="text-sm text-slate-500">Add a candidate or adjust your filters.</p>
+          <p className="font-bold text-slate-700">No leads found.</p>
+          <p className="text-sm text-slate-500">Add a lead or adjust your filters.</p>
         </div>
       )}
     </section>

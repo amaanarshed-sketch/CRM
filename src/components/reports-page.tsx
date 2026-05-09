@@ -20,17 +20,18 @@ export function ReportsPage() {
     <AppShell>
       <PageHeader title="Weekly Report" kicker={`Snapshot through ${todayISO()}`} />
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <ReportCard label="New candidates this week" value={newThisWeek} />
+        <ReportCard label="New leads this week" value={newThisWeek} />
         <ReportCard label="Follow-ups due" value={candidates.filter(needsFollowUp).length} />
-        <ReportCard label="Stale candidates" value={metrics.stale} />
-        <ReportCard label="Documents pending" value={metrics.documentsPending} />
-        <ReportCard label="Interviews scheduled" value={metrics.interviewsScheduled} />
-        <ReportCard label="Placed candidates" value={metrics.placed} />
+        <ReportCard label="Stale leads" value={metrics.stale} />
+        <ReportCard label="Info pending" value={metrics.infoPending} />
+        <ReportCard label="Appointments scheduled" value={metrics.appointmentsScheduled} />
+        <ReportCard label="Won leads" value={metrics.won} />
+        <ReportCard label="Lost leads" value={metrics.lost} />
       </section>
       <section className="grid gap-5 lg:grid-cols-2">
-        <Breakdown title="Candidates by staff member" rows={byStaff} />
+        <Breakdown title="Leads by staff member" rows={byStaff} />
         <Breakdown
-          title="Candidates by stage"
+          title="Leads by stage"
           rows={PIPELINE_STAGES.reduce<Record<string, number>>((acc, stage) => {
             acc[stage] = byStage[stage] || 0;
             return acc;

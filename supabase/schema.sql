@@ -5,13 +5,12 @@ begin
   create type public.pipeline_stage as enum (
     'New',
     'Contacted',
-    'Documents Pending',
-    'Screened',
-    'Interview Scheduled',
-    'Client Feedback Pending',
-    'Selected',
-    'Placed',
-    'Rejected',
+    'Follow-up Due',
+    'Interested',
+    'Appointment Scheduled',
+    'Proposal Sent',
+    'Won',
+    'Lost',
     'Stale'
   );
 exception
@@ -133,7 +132,7 @@ declare
   agency_name text;
   profile_name text;
 begin
-  agency_name := coalesce(new.raw_user_meta_data->>'agency_name', 'New Agency');
+  agency_name := coalesce(new.raw_user_meta_data->>'agency_name', 'New Workspace');
   profile_name := coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1));
 
   insert into public.agencies (name)
@@ -168,7 +167,10 @@ drop policy if exists "Agency scoped staff read" on public.staff_members;
 drop policy if exists "Agency scoped staff write" on public.staff_members;
 drop policy if exists "Agency scoped candidates read" on public.candidates;
 drop policy if exists "Agency scoped candidates write" on public.candidates;
+drop policy if exists "Workspace scoped leads read" on public.candidates;
+drop policy if exists "Workspace scoped leads write" on public.candidates;
 drop policy if exists "Public intake can create new candidates" on public.candidates;
+drop policy if exists "Public intake can create new leads" on public.candidates;
 drop policy if exists "Agency scoped notes read" on public.candidate_notes;
 drop policy if exists "Agency scoped notes write" on public.candidate_notes;
 
@@ -194,16 +196,16 @@ on public.staff_members for all
 using (agency_id = public.current_agency_id())
 with check (agency_id = public.current_agency_id());
 
-create policy "Agency scoped candidates read"
+create policy "Workspace scoped leads read"
 on public.candidates for select
 using (agency_id = public.current_agency_id());
 
-create policy "Agency scoped candidates write"
+create policy "Workspace scoped leads write"
 on public.candidates for all
 using (agency_id = public.current_agency_id())
 with check (agency_id = public.current_agency_id());
 
-create policy "Public intake can create new candidates"
+create policy "Public intake can create new leads"
 on public.candidates for insert
 to anon
 with check (

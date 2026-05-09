@@ -43,19 +43,22 @@ export function parseCandidateCSV(text: string): CandidateInput[] {
 
   return body
     .map((row) => {
-      const value = (field: string) => row[normalizedHeaders.indexOf(field)] || "";
+      const value = (...fields: string[]) => {
+        const index = fields.map((field) => normalizedHeaders.indexOf(field)).find((item) => item >= 0);
+        return index === undefined ? "" : row[index] || "";
+      };
       return makeCandidateInput({
-        fullName: value("full_name"),
+        fullName: value("full_name", "name", "lead_name"),
         phone: value("phone"),
         email: value("email"),
         source: value("source"),
-        jobInterest: value("job_interest"),
+        jobInterest: value("job_interest", "interest", "lead_interest"),
         location: value("location"),
         assignedStaff: value("assigned_staff"),
         stage: normalizeStage(value("stage")),
         lastContactedDate: value("last_contacted_date"),
         nextFollowUpDate: value("next_follow_up_date"),
-        documentStatus: normalizeDocumentStatus(value("document_status")),
+        documentStatus: normalizeDocumentStatus(value("document_status", "info_status")),
         notes: value("notes")
       });
     })

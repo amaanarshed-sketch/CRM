@@ -3,8 +3,8 @@ import { AppProvider } from "@/components/app-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Candidate Recovery OS",
-  description: "Follow-up control center for recruitment agencies."
+  title: "LeadLoop",
+  description: "Simple follow-up CRM for small sales teams."
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
