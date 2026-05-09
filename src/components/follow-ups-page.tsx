@@ -1,18 +1,18 @@
 "use client";
 
-import { sortOldestFollowUpFirst, needsFollowUp } from "@/lib/candidate-utils";
+import { sortOldestFollowUpFirst, needsFollowUp } from "@/lib/lead-utils";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
-import { CandidateTable } from "./candidate-table";
+import { LeadTable } from "./lead-table";
 
 export function FollowUpsPage() {
-  const { candidates } = useApp();
-  const rows = sortOldestFollowUpFirst(candidates.filter(needsFollowUp));
+  const { leads } = useApp();
+  const rows = sortOldestFollowUpFirst(leads.filter(needsFollowUp));
 
   return (
     <AppShell>
       <PageHeader title="Follow-ups" kicker="Oldest due first" />
-      <CandidateTable rows={rows} />
+      <LeadTable rows={rows} />
     </AppShell>
   );
 }

@@ -1,27 +1,27 @@
 "use client";
 
-import { computeMetrics, groupCount, needsFollowUp, todayISO } from "@/lib/candidate-utils";
+import { computeMetrics, groupCount, needsFollowUp, todayISO } from "@/lib/lead-utils";
 import { PIPELINE_STAGES } from "@/lib/types";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
 
 export function ReportsPage() {
-  const { agency, candidates } = useApp();
+  const { agency, leads } = useApp();
   const threshold = agency?.staleThresholdDays || 7;
-  const metrics = computeMetrics(candidates, threshold);
+  const metrics = computeMetrics(leads, threshold);
   const weekStart = new Date();
   weekStart.setDate(weekStart.getDate() - 7);
   const weekStartISO = weekStart.toISOString().slice(0, 10);
-  const newThisWeek = candidates.filter((candidate) => candidate.createdAt.slice(0, 10) >= weekStartISO).length;
-  const byStaff = groupCount(candidates.map((candidate) => candidate.assignedStaff || "Unassigned"));
-  const byStage = groupCount(candidates.map((candidate) => candidate.stage));
+  const newThisWeek = leads.filter((lead) => lead.createdAt.slice(0, 10) >= weekStartISO).length;
+  const byStaff = groupCount(leads.map((lead) => lead.assignedStaff || "Unassigned"));
+  const byStage = groupCount(leads.map((lead) => lead.stage));
 
   return (
     <AppShell>
       <PageHeader title="Weekly Report" kicker={`Snapshot through ${todayISO()}`} />
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <ReportCard label="New leads this week" value={newThisWeek} helper="Fresh opportunities added" />
-        <ReportCard label="Follow-ups due" value={candidates.filter(needsFollowUp).length} helper="Needs team action" tone="amber" />
+        <ReportCard label="Follow-ups due" value={leads.filter(needsFollowUp).length} helper="Needs team action" tone="amber" />
         <ReportCard label="Stale leads" value={metrics.stale} helper="Last contact too old" tone="red" />
         <ReportCard label="Info pending" value={metrics.infoPending} helper="Missing details or requirements" tone="amber" />
         <ReportCard label="Appointments scheduled" value={metrics.appointmentsScheduled} helper="Booked conversations" />

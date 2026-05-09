@@ -1,6 +1,6 @@
 import {
-  Candidate,
-  CandidateInput,
+  Lead,
+  LeadInput,
   DOCUMENT_STATUSES,
   DocumentStatus,
   PIPELINE_STAGES,
@@ -30,30 +30,20 @@ export function isTerminalStage(stage: PipelineStage) {
   return TERMINAL_STAGES.includes(stage);
 }
 
-export function isCandidateStale(candidate: Candidate, thresholdDays: number) {
-  return !isTerminalStage(candidate.stage) && daysBetween(candidate.lastContactedDate) > thresholdDays;
+export function isLeadStale(lead: Lead, thresholdDays: number) {
+  return !isTerminalStage(lead.stage) && daysBetween(lead.lastContactedDate) > thresholdDays;
 }
 
-export function needsFollowUp(candidate: Candidate) {
+export function needsFollowUp(lead: Lead) {
   return (
-    Boolean(candidate.nextFollowUpDate) &&
-    candidate.nextFollowUpDate <= todayISO() &&
-    !isTerminalStage(candidate.stage)
+    Boolean(lead.nextFollowUpDate) &&
+    lead.nextFollowUpDate <= todayISO() &&
+    !isTerminalStage(lead.stage)
   );
 }
 
 export function normalizeStage(value?: string): PipelineStage {
   const raw = (value || "").trim().toLowerCase();
-  const legacyMap: Record<string, PipelineStage> = {
-    "documents pending": "Follow-up Due",
-    screened: "Interested",
-    "interview scheduled": "Appointment Scheduled",
-    "client feedback pending": "Proposal Sent",
-    selected: "Interested",
-    placed: "Won",
-    rejected: "Lost"
-  };
-  if (legacyMap[raw]) return legacyMap[raw];
   const match = PIPELINE_STAGES.find((stage) => stage.toLowerCase() === raw);
   return match || "New";
 }
@@ -63,7 +53,7 @@ export function normalizeDocumentStatus(value?: string): DocumentStatus {
   return match || "Not requested";
 }
 
-export function makeCandidateInput(input: Partial<CandidateInput>): CandidateInput {
+export function makeLeadInput(input: Partial<LeadInput>): LeadInput {
   return {
     fullName: input.fullName || "",
     phone: input.phone || "",
@@ -81,21 +71,21 @@ export function makeCandidateInput(input: Partial<CandidateInput>): CandidateInp
   };
 }
 
-export function computeMetrics(candidates: Candidate[], staleThresholdDays: number) {
-  const active = candidates.filter((candidate) => !isTerminalStage(candidate.stage));
+export function computeMetrics(leads: Lead[], staleThresholdDays: number) {
+  const active = leads.filter((lead) => !isTerminalStage(lead.stage));
   return {
     active: active.length,
-    followUpsDue: candidates.filter(needsFollowUp).length,
-    stale: candidates.filter((candidate) => isCandidateStale(candidate, staleThresholdDays)).length,
-    infoPending: candidates.filter((candidate) => candidate.documentStatus !== "Complete").length,
-    appointmentsScheduled: candidates.filter((candidate) => candidate.stage === "Appointment Scheduled").length,
-    won: candidates.filter((candidate) => candidate.stage === "Won").length,
-    lost: candidates.filter((candidate) => candidate.stage === "Lost").length
+    followUpsDue: leads.filter(needsFollowUp).length,
+    stale: leads.filter((lead) => isLeadStale(lead, staleThresholdDays)).length,
+    infoPending: leads.filter((lead) => lead.documentStatus !== "Complete").length,
+    appointmentsScheduled: leads.filter((lead) => lead.stage === "Appointment Scheduled").length,
+    won: leads.filter((lead) => lead.stage === "Won").length,
+    lost: leads.filter((lead) => lead.stage === "Lost").length
   };
 }
 
-export function sortOldestFollowUpFirst(candidates: Candidate[]) {
-  return [...candidates].sort((a, b) => {
+export function sortOldestFollowUpFirst(leads: Lead[]) {
+  return [...leads].sort((a, b) => {
     if (!a.nextFollowUpDate) return 1;
     if (!b.nextFollowUpDate) return -1;
     return a.nextFollowUpDate.localeCompare(b.nextFollowUpDate);

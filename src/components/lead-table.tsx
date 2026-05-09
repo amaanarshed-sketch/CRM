@@ -5,41 +5,41 @@ import { CheckCircle2, Eye, Search, XCircle } from "lucide-react";
 import {
   formatDate,
   getStageTone,
-  isCandidateStale,
+  isLeadStale,
   needsFollowUp,
   todayISO
-} from "@/lib/candidate-utils";
-import { Candidate, PIPELINE_STAGES, PipelineStage } from "@/lib/types";
+} from "@/lib/lead-utils";
+import { Lead, PIPELINE_STAGES, PipelineStage } from "@/lib/types";
 import { useApp } from "./app-provider";
 import { useMemo, useState } from "react";
 import { GenerateMessageButton } from "./message-generator";
 
 type Props = {
-  rows: Candidate[];
+  rows: Lead[];
   showFilters?: boolean;
 };
 
-export function CandidateTable({ rows, showFilters = true }: Props) {
-  const { agency, updateCandidate } = useApp();
+export function LeadTable({ rows, showFilters = true }: Props) {
+  const { agency, updateLead } = useApp();
   const [query, setQuery] = useState("");
   const [stage, setStage] = useState("All");
   const staleThreshold = agency?.staleThresholdDays || 7;
 
   const filteredRows = useMemo(() => {
-    return rows.filter((candidate) => {
+    return rows.filter((lead) => {
       const haystack = [
-        candidate.fullName,
-        candidate.phone,
-        candidate.email,
-        candidate.jobInterest,
-        candidate.assignedStaff,
-        candidate.stage,
-        candidate.documentStatus
+        lead.fullName,
+        lead.phone,
+        lead.email,
+        lead.jobInterest,
+        lead.assignedStaff,
+        lead.stage,
+        lead.documentStatus
       ]
         .join(" ")
         .toLowerCase();
       const matchesQuery = haystack.includes(query.toLowerCase());
-      const matchesStage = stage === "All" || candidate.stage === stage;
+      const matchesStage = stage === "All" || lead.stage === stage;
       return matchesQuery && matchesStage;
     });
   }, [query, rows, stage]);
@@ -87,49 +87,49 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {filteredRows.map((candidate) => {
-              const stale = isCandidateStale(candidate, staleThreshold);
-              const due = needsFollowUp(candidate);
+            {filteredRows.map((lead) => {
+              const stale = isLeadStale(lead, staleThreshold);
+              const due = needsFollowUp(lead);
               return (
-                <tr key={candidate.id} className={`transition hover:bg-[#EFF6FF]/50 ${stale ? "bg-red-50/25" : due ? "bg-amber-50/35" : ""}`}>
+                <tr key={lead.id} className={`transition hover:bg-[#EFF6FF]/50 ${stale ? "bg-red-50/25" : due ? "bg-amber-50/35" : ""}`}>
                   <td className="px-4 py-3">
-                    <Link href={`/candidates/${candidate.id}`} className="font-black text-[#08090A] hover:text-[#2563EB]">
-                      {candidate.fullName || "Unnamed lead"}
+                    <Link href={`/leads/${lead.id}`} className="font-black text-[#08090A] hover:text-[#2563EB]">
+                      {lead.fullName || "Unnamed lead"}
                     </Link>
-                    <p className="text-xs text-[#8A94A6]">{candidate.email || "No email"}</p>
+                    <p className="text-xs text-[#8A94A6]">{lead.email || "No email"}</p>
                   </td>
-                  <td className="px-4 py-3 text-[#687184]">{candidate.phone || "Not set"}</td>
-                  <td className="px-4 py-3 font-semibold text-slate-700">{candidate.jobInterest || "Not set"}</td>
+                  <td className="px-4 py-3 text-[#687184]">{lead.phone || "Not set"}</td>
+                  <td className="px-4 py-3 font-semibold text-slate-700">{lead.jobInterest || "Not set"}</td>
                   <td className="px-4 py-3">
                     <select
-                      className={`focus-ring rounded-full border px-2.5 py-1 text-xs font-black ${getStageTone(candidate.stage)}`}
-                      value={candidate.stage}
-                      onChange={(event) => updateCandidate(candidate.id, { stage: event.target.value as PipelineStage })}
+                      className={`focus-ring rounded-full border px-2.5 py-1 text-xs font-black ${getStageTone(lead.stage)}`}
+                      value={lead.stage}
+                      onChange={(event) => updateLead(lead.id, { stage: event.target.value as PipelineStage })}
                     >
                       {PIPELINE_STAGES.map((item) => (
                         <option key={item}>{item}</option>
                       ))}
                     </select>
                   </td>
-                  <td className="px-4 py-3 text-[#687184]">{candidate.assignedStaff || "Unassigned"}</td>
+                  <td className="px-4 py-3 text-[#687184]">{lead.assignedStaff || "Unassigned"}</td>
                   <td className="px-4 py-3">
                     <input
                       className="field-control w-36 px-2 py-1 text-xs"
                       type="date"
-                      value={candidate.lastContactedDate}
-                      onChange={(event) => updateCandidate(candidate.id, { lastContactedDate: event.target.value })}
+                      value={lead.lastContactedDate}
+                      onChange={(event) => updateLead(lead.id, { lastContactedDate: event.target.value })}
                     />
                   </td>
                   <td className="px-4 py-3">
                     <input
                       className={`field-control w-36 px-2 py-1 text-xs ${due ? "border-amber-300 bg-amber-50 font-bold text-amber-900" : ""}`}
                       type="date"
-                      value={candidate.nextFollowUpDate}
-                      onChange={(event) => updateCandidate(candidate.id, { nextFollowUpDate: event.target.value })}
+                      value={lead.nextFollowUpDate}
+                      onChange={(event) => updateLead(lead.id, { nextFollowUpDate: event.target.value })}
                     />
                   </td>
                   <td className="px-4 py-3">
-                    <span className="status-pill text-[#687184]">{candidate.documentStatus}</span>
+                    <span className="status-pill text-[#687184]">{lead.documentStatus}</span>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`status-pill ${stale ? "border-red-200 bg-red-50 text-red-700" : due ? "border-amber-200 bg-amber-50 text-amber-800" : "text-[#687184]"}`}>
@@ -138,17 +138,17 @@ export function CandidateTable({ rows, showFilters = true }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <Link href={`/candidates/${candidate.id}`} className="btn-secondary p-2" aria-label="View lead">
+                      <Link href={`/leads/${lead.id}`} className="btn-secondary p-2" aria-label="View lead">
                         <Eye size={16} />
                       </Link>
-                      <GenerateMessageButton candidate={candidate} label="Message" compact />
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 bg-white p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
+                      <GenerateMessageButton lead={lead} label="Message" compact />
+                      <button onClick={() => updateLead(lead.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 bg-white p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
                         <CheckCircle2 size={16} />
                       </button>
-                      <button onClick={() => updateCandidate(candidate.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 bg-white p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
+                      <button onClick={() => updateLead(lead.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 bg-white p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
                         <XCircle size={16} />
                       </button>
-                      <button onClick={() => updateCandidate(candidate.id, { lastContactedDate: todayISO() })} className="btn-secondary px-2 py-2 text-xs">
+                      <button onClick={() => updateLead(lead.id, { lastContactedDate: todayISO() })} className="btn-secondary px-2 py-2 text-xs">
                         Contacted
                       </button>
                     </div>

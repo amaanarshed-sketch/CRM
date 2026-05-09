@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { Candidate, FollowUpKind } from "@/lib/types";
-import { formatDate } from "@/lib/candidate-utils";
+import { Lead, FollowUpKind } from "@/lib/types";
+import { formatDate } from "@/lib/lead-utils";
 
 type RequestBody = {
-  candidate: Candidate;
+  lead: Lead;
   kind: FollowUpKind;
 };
 
 export async function POST(request: Request) {
   const body = (await request.json()) as RequestBody;
-  const fallback = templateMessage(body.kind, body.candidate);
+  const fallback = templateMessage(body.kind, body.lead);
 
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json({ message: fallback, source: "template" });
@@ -35,13 +35,13 @@ export async function POST(request: Request) {
             content: JSON.stringify({
               messageType: body.kind,
               lead: {
-                name: body.candidate.fullName,
-                stage: body.candidate.stage,
-                interest: body.candidate.jobInterest,
-                infoStatus: body.candidate.documentStatus,
-                lastContactedDate: body.candidate.lastContactedDate,
-                nextFollowUpDate: body.candidate.nextFollowUpDate,
-                notes: body.candidate.notes
+                name: body.lead.fullName,
+                stage: body.lead.stage,
+                interest: body.lead.jobInterest,
+                infoStatus: body.lead.documentStatus,
+                lastContactedDate: body.lead.lastContactedDate,
+                nextFollowUpDate: body.lead.nextFollowUpDate,
+                notes: body.lead.notes
               }
             })
           }
@@ -62,13 +62,13 @@ export async function POST(request: Request) {
   }
 }
 
-function templateMessage(kind: FollowUpKind, candidate: Candidate) {
-  const name = candidate.fullName || "there";
-  const interest = candidate.jobInterest || "your inquiry";
-  const lastContact = formatDate(candidate.lastContactedDate);
-  const nextFollowUp = formatDate(candidate.nextFollowUpDate);
-  const infoStatus = candidate.documentStatus || "Not requested";
-  const notes = candidate.notes ? `\n\nContext: ${candidate.notes}` : "";
+function templateMessage(kind: FollowUpKind, lead: Lead) {
+  const name = lead.fullName || "there";
+  const interest = lead.jobInterest || "your inquiry";
+  const lastContact = formatDate(lead.lastContactedDate);
+  const nextFollowUp = formatDate(lead.nextFollowUpDate);
+  const infoStatus = lead.documentStatus || "Not requested";
+  const notes = lead.notes ? `\n\nContext: ${lead.notes}` : "";
 
   const templates: Record<FollowUpKind, string> = {
     "First follow-up": `Hi ${name}, thanks for your interest in ${interest}. Are you still open to a quick chat about the next steps? Let me know a good time today or tomorrow.${notes}`,

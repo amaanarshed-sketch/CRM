@@ -2,21 +2,21 @@
 
 import { ChangeEvent, useState } from "react";
 import { FileUp } from "lucide-react";
-import { parseCandidateCSV } from "@/lib/csv";
+import { parseLeadCSV } from "@/lib/csv";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
-import { CandidateTable } from "./candidate-table";
+import { LeadTable } from "./lead-table";
 
 export function ImportPage() {
-  const { importCandidates } = useApp();
-  const [preview, setPreview] = useState<ReturnType<typeof parseCandidateCSV>>([]);
+  const { importLeads } = useApp();
+  const [preview, setPreview] = useState<ReturnType<typeof parseLeadCSV>>([]);
   const [message, setMessage] = useState("");
 
   async function handleFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
     const text = await file.text();
-    const rows = parseCandidateCSV(text);
+    const rows = parseLeadCSV(text);
     setPreview(rows);
     setMessage(`${rows.length} lead rows ready to import.`);
   }
@@ -50,7 +50,7 @@ export function ImportPage() {
           <button
             disabled={!preview.length}
             onClick={async () => {
-              const count = await importCandidates(preview);
+              const count = await importLeads(preview);
               setPreview([]);
               setMessage(`Imported ${count} leads.`);
             }}
@@ -60,7 +60,7 @@ export function ImportPage() {
           </button>
         </div>
       </section>
-      {preview.length > 0 && <CandidateTable rows={preview.map((candidate, index) => ({ ...candidate, id: `preview-${index}`, agencyId: "preview", createdAt: "", updatedAt: "" }))} />}
+      {preview.length > 0 && <LeadTable rows={preview.map((lead, index) => ({ ...lead, id: `preview-${index}`, agencyId: "preview", createdAt: "", updatedAt: "" }))} />}
     </AppShell>
   );
 }

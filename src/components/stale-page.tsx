@@ -1,19 +1,19 @@
 "use client";
 
-import { isCandidateStale } from "@/lib/candidate-utils";
+import { isLeadStale } from "@/lib/lead-utils";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
-import { CandidateTable } from "./candidate-table";
+import { LeadTable } from "./lead-table";
 
 export function StalePage() {
-  const { agency, candidates } = useApp();
+  const { agency, leads } = useApp();
   const threshold = agency?.staleThresholdDays || 7;
-  const rows = candidates.filter((candidate) => isCandidateStale(candidate, threshold));
+  const rows = leads.filter((lead) => isLeadStale(lead, threshold));
 
   return (
     <AppShell>
       <PageHeader title="Stale Leads" kicker={`No contact in more than ${threshold} days`} />
-      <CandidateTable rows={rows} />
+      <LeadTable rows={rows} />
     </AppShell>
   );
 }

@@ -19,7 +19,7 @@ import { AuthScreen } from "./auth-screen";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/candidates", label: "Leads", icon: Users },
+  { href: "/leads", label: "Leads", icon: Users },
   { href: "/follow-ups", label: "Follow-ups", icon: CalendarClock },
   { href: "/stale", label: "Stale Leads", icon: Siren },
   { href: "/import", label: "Import CSV", icon: FileUp },

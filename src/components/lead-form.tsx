@@ -1,25 +1,25 @@
 "use client";
 
 import { FormEvent } from "react";
-import { DOCUMENT_STATUSES, Candidate, CandidateInput, PIPELINE_STAGES } from "@/lib/types";
-import { makeCandidateInput } from "@/lib/candidate-utils";
+import { DOCUMENT_STATUSES, Lead, LeadInput, PIPELINE_STAGES } from "@/lib/types";
+import { makeLeadInput } from "@/lib/lead-utils";
 import { useApp } from "./app-provider";
 
 type Props = {
-  candidate?: Candidate;
-  onSave: (input: CandidateInput) => void;
+  lead?: Lead;
+  onSave: (input: LeadInput) => void;
   submitLabel?: string;
 };
 
-export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: Props) {
+export function LeadForm({ lead, onSave, submitLabel = "Save lead" }: Props) {
   const { staffMembers } = useApp();
-  const initial = makeCandidateInput(candidate || {});
+  const initial = makeLeadInput(lead || {});
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     onSave(
-      makeCandidateInput({
+      makeLeadInput({
         fullName: String(form.get("fullName") || ""),
         phone: String(form.get("phone") || ""),
         email: String(form.get("email") || ""),
@@ -27,10 +27,10 @@ export function CandidateForm({ candidate, onSave, submitLabel = "Save lead" }: 
         jobInterest: String(form.get("jobInterest") || ""),
         location: String(form.get("location") || ""),
         assignedStaff: String(form.get("assignedStaff") || ""),
-        stage: String(form.get("stage") || "New") as CandidateInput["stage"],
+        stage: String(form.get("stage") || "New") as LeadInput["stage"],
         lastContactedDate: String(form.get("lastContactedDate") || ""),
         nextFollowUpDate: String(form.get("nextFollowUpDate") || ""),
-        documentStatus: String(form.get("documentStatus") || "Not requested") as CandidateInput["documentStatus"],
+        documentStatus: String(form.get("documentStatus") || "Not requested") as LeadInput["documentStatus"],
         notes: String(form.get("notes") || ""),
         experience: String(form.get("experience") || "")
       })

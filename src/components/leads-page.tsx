@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
-import { CandidateForm } from "./candidate-form";
-import { CandidateTable } from "./candidate-table";
+import { LeadForm } from "./lead-form";
+import { LeadTable } from "./lead-table";
 
-export function CandidatesPage() {
-  const { candidates, addCandidate } = useApp();
+export function LeadsPage() {
+  const { leads, addLead } = useApp();
   const [adding, setAdding] = useState(false);
 
   return (
@@ -25,16 +25,16 @@ export function CandidatesPage() {
       />
       {adding && (
         <div className="mb-6">
-          <CandidateForm
+          <LeadForm
             submitLabel="Create lead"
             onSave={(input) => {
-              addCandidate(input);
+              addLead(input);
               setAdding(false);
             }}
           />
         </div>
       )}
-      <CandidateTable rows={candidates} />
+      <LeadTable rows={leads} />
     </AppShell>
   );
 }

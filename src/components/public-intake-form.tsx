@@ -7,7 +7,7 @@ import { useApp } from "./app-provider";
 
 export function PublicIntakeForm() {
   const params = useParams<{ agencyId: string }>();
-  const { ready, allAgencies, addCandidate } = useApp();
+  const { ready, allAgencies, addLead } = useApp();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -21,7 +21,7 @@ export function PublicIntakeForm() {
     setSubmitting(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const candidate = await addCandidate(
+    const lead = await addLead(
       {
         fullName: String(form.get("fullName") || ""),
         phone: String(form.get("phone") || ""),
@@ -37,7 +37,7 @@ export function PublicIntakeForm() {
       params.agencyId
     );
     setSubmitting(false);
-    if (candidate) setSubmitted(true);
+    if (lead) setSubmitted(true);
     else setError("We could not submit the form. Please try again.");
   }
 

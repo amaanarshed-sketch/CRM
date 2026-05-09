@@ -1,5 +1,5 @@
-import { makeCandidateInput, normalizeDocumentStatus, normalizeStage } from "./candidate-utils";
-import { CandidateInput } from "./types";
+import { makeLeadInput, normalizeDocumentStatus, normalizeStage } from "./lead-utils";
+import { LeadInput } from "./types";
 
 function parseCSV(text: string) {
   const rows: string[][] = [];
@@ -35,7 +35,7 @@ function parseCSV(text: string) {
   return rows;
 }
 
-export function parseCandidateCSV(text: string): CandidateInput[] {
+export function parseLeadCSV(text: string): LeadInput[] {
   const rows = parseCSV(text);
   const [headers, ...body] = rows;
   if (!headers?.length) return [];
@@ -47,7 +47,7 @@ export function parseCandidateCSV(text: string): CandidateInput[] {
         const index = fields.map((field) => normalizedHeaders.indexOf(field)).find((item) => item >= 0);
         return index === undefined ? "" : row[index] || "";
       };
-      return makeCandidateInput({
+      return makeLeadInput({
         fullName: value("full_name", "name", "lead_name"),
         phone: value("phone"),
         email: value("email"),
@@ -62,5 +62,5 @@ export function parseCandidateCSV(text: string): CandidateInput[] {
         notes: value("notes")
       });
     })
-    .filter((candidate) => candidate.fullName || candidate.phone || candidate.email);
+    .filter((lead) => lead.fullName || lead.phone || lead.email);
 }

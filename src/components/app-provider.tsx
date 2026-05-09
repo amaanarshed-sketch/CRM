@@ -2,9 +2,9 @@
 
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { addDaysISO, makeCandidateInput, normalizeDocumentStatus, normalizeStage, todayISO } from "@/lib/candidate-utils";
-import { CandidateRow, isSupabaseConfigured, supabase } from "@/lib/supabase";
-import { Agency, Candidate, CandidateInput, Profile, StaffMember } from "@/lib/types";
+import { addDaysISO, makeLeadInput, normalizeDocumentStatus, normalizeStage, todayISO } from "@/lib/lead-utils";
+import { LeadRow, isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { Agency, Lead, LeadInput, Profile, StaffMember } from "@/lib/types";
 
 type AuthResult = { ok: true } | { ok: false; message: string };
 
@@ -13,17 +13,17 @@ type AppContextValue = {
   user: Profile | null;
   agency: Agency | null;
   staffMembers: StaffMember[];
-  candidates: Candidate[];
+  leads: Lead[];
   allAgencies: Agency[];
   isDemo: boolean;
   login: (email: string, password: string) => Promise<AuthResult>;
   signup: (payload: { fullName: string; email: string; password: string; agencyName: string }) => Promise<AuthResult>;
   startDemo: () => void;
   logout: () => Promise<void>;
-  addCandidate: (input: Partial<CandidateInput>, agencyId?: string) => Promise<Candidate | null>;
-  updateCandidate: (id: string, input: Partial<CandidateInput>) => Promise<void>;
-  deleteCandidate: (id: string) => Promise<void>;
-  importCandidates: (rows: CandidateInput[]) => Promise<number>;
+  addLead: (input: Partial<LeadInput>, agencyId?: string) => Promise<Lead | null>;
+  updateLead: (id: string, input: Partial<LeadInput>) => Promise<void>;
+  deleteLead: (id: string) => Promise<void>;
+  importLeads: (rows: LeadInput[]) => Promise<number>;
   updateAgency: (input: Partial<Agency>) => Promise<void>;
   replaceStaff: (names: string[]) => Promise<void>;
 };
@@ -35,7 +35,7 @@ const emptyAgencyData = {
   agency: null as Agency | null,
   user: null as Profile | null,
   staffMembers: [] as StaffMember[],
-  candidates: [] as Candidate[],
+  leads: [] as Lead[],
   allAgencies: [] as Agency[]
 };
 
@@ -92,7 +92,7 @@ function toStaff(row: { id: string; agency_id: string; name: string; email: stri
   };
 }
 
-function toCandidate(row: CandidateRow): Candidate {
+function toLead(row: LeadRow): Lead {
   return {
     id: row.id,
     agencyId: row.agency_id,
@@ -114,7 +114,7 @@ function toCandidate(row: CandidateRow): Candidate {
   };
 }
 
-function toCandidateRow(input: Partial<CandidateInput>, agencyId: string) {
+function toLeadRow(input: Partial<LeadInput>, agencyId: string) {
   return {
     agency_id: agencyId,
     full_name: input.fullName || "",
@@ -133,7 +133,7 @@ function toCandidateRow(input: Partial<CandidateInput>, agencyId: string) {
   };
 }
 
-function toCandidatePatch(input: Partial<CandidateInput>) {
+function toLeadPatch(input: Partial<LeadInput>) {
   const patch: Record<string, string | null> = {};
   if ("fullName" in input) patch.full_name = input.fullName || "";
   if ("phone" in input) patch.phone = input.phone || null;
@@ -174,9 +174,9 @@ function buildDemoData() {
     name,
     createdAt: now
   }));
-  const candidates: Candidate[] = [
+  const leads: Lead[] = [
     {
-      id: id("candidate"),
+      id: id("lead"),
       agencyId: agency.id,
       fullName: "Sarah Ahmed",
       phone: "+94 77 123 4567",
@@ -194,7 +194,7 @@ function buildDemoData() {
       updatedAt: now
     },
     {
-      id: id("candidate"),
+      id: id("lead"),
       agencyId: agency.id,
       fullName: "Daniel Perera",
       phone: "+94 71 555 0199",
@@ -212,7 +212,7 @@ function buildDemoData() {
       updatedAt: now
     },
     {
-      id: id("candidate"),
+      id: id("lead"),
       agencyId: agency.id,
       fullName: "Nadeesha Silva",
       phone: "+94 76 888 4422",
@@ -230,7 +230,7 @@ function buildDemoData() {
       updatedAt: now
     },
     {
-      id: id("candidate"),
+      id: id("lead"),
       agencyId: agency.id,
       fullName: "Rizwan Khan",
       phone: "+94 75 777 2200",
@@ -249,7 +249,7 @@ function buildDemoData() {
     }
   ];
 
-  return { agency, user, staffMembers, candidates, allAgencies: [agency] };
+  return { agency, user, staffMembers, leads, allAgencies: [agency] };
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -283,21 +283,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     const profile = toProfile(profileRow);
-    const [agencyResult, staffResult, candidateResult] = await Promise.all([
+    const [agencyResult, staffResult, leadResult] = await Promise.all([
       supabase
         .from("agencies")
         .select("id,name,stale_threshold_days,default_follow_up_days,created_at")
         .eq("id", profile.agencyId)
         .single(),
       supabase.from("staff_members").select("id,agency_id,name,email,created_at").order("created_at"),
-      supabase.from("candidates").select("*").order("updated_at", { ascending: false })
+      supabase.from("leads").select("*").order("updated_at", { ascending: false })
     ]);
 
     setData({
       user: profile,
       agency: agencyResult.data ? toAgency(agencyResult.data) : null,
       staffMembers: staffResult.data?.map(toStaff) || [],
-      candidates: (candidateResult.data as CandidateRow[] | null)?.map(toCandidate) || [],
+      leads: (leadResult.data as LeadRow[] | null)?.map(toLead) || [],
       allAgencies: agencyResult.data ? [toAgency(agencyResult.data)] : []
     });
   }
@@ -357,7 +357,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       user: isDemo ? data.user : authUser ? data.user : null,
       agency: isDemo || authUser ? data.agency : null,
       staffMembers: isDemo || authUser ? data.staffMembers : [],
-      candidates: isDemo || authUser ? data.candidates : [],
+      leads: isDemo || authUser ? data.leads : [],
       allAgencies: data.allAgencies,
       isDemo,
       async login(email, password) {
@@ -403,101 +403,101 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setData(emptyAgencyData);
         if (supabase) await supabase.auth.signOut();
       },
-      async addCandidate(input, explicitAgencyId) {
+      async addLead(input, explicitAgencyId) {
         const targetAgencyId = explicitAgencyId || data.agency?.id;
         if (!targetAgencyId) return null;
         const now = new Date().toISOString();
-        const defaults = makeCandidateInput({
+        const defaults = makeLeadInput({
           stage: "New",
           nextFollowUpDate: addDaysISO(todayISO(), data.agency?.defaultFollowUpDays || 2),
           ...input
         });
 
         if (isDemo || !supabase) {
-          const candidate: Candidate = {
+          const lead: Lead = {
             ...defaults,
-            id: id("candidate"),
+            id: id("lead"),
             agencyId: targetAgencyId,
             createdAt: now,
             updatedAt: now
           };
-          setData((current) => ({ ...current, candidates: [candidate, ...current.candidates] }));
-          return candidate;
+          setData((current) => ({ ...current, leads: [lead, ...current.leads] }));
+          return lead;
         }
 
         const { data: inserted, error } = await supabase
-          .from("candidates")
-          .insert(toCandidateRow(defaults, targetAgencyId))
+          .from("leads")
+          .insert(toLeadRow(defaults, targetAgencyId))
           .select("*")
           .single();
         if (error || !inserted) return null;
-        const candidate = toCandidate(inserted as CandidateRow);
-        setData((current) => ({ ...current, candidates: [candidate, ...current.candidates] }));
-        return candidate;
+        const lead = toLead(inserted as LeadRow);
+        setData((current) => ({ ...current, leads: [lead, ...current.leads] }));
+        return lead;
       },
-      async updateCandidate(candidateId, input) {
+      async updateLead(leadId, input) {
         if (isDemo || !supabase) {
           setData((current) => ({
             ...current,
-            candidates: current.candidates.map((candidate) =>
-              candidate.id === candidateId ? { ...candidate, ...input, updatedAt: new Date().toISOString() } : candidate
+            leads: current.leads.map((lead) =>
+              lead.id === leadId ? { ...lead, ...input, updatedAt: new Date().toISOString() } : lead
             )
           }));
           return;
         }
 
         const { data: updated, error } = await supabase
-          .from("candidates")
-          .update(toCandidatePatch(input))
-          .eq("id", candidateId)
+          .from("leads")
+          .update(toLeadPatch(input))
+          .eq("id", leadId)
           .select("*")
           .single();
         if (error || !updated) return;
-        const candidate = toCandidate(updated as CandidateRow);
+        const lead = toLead(updated as LeadRow);
         setData((current) => ({
           ...current,
-          candidates: current.candidates.map((item) => (item.id === candidateId ? candidate : item))
+          leads: current.leads.map((item) => (item.id === leadId ? lead : item))
         }));
       },
-      async deleteCandidate(candidateId) {
+      async deleteLead(leadId) {
         if (isDemo || !supabase) {
           setData((current) => ({
             ...current,
-            candidates: current.candidates.filter((candidate) => candidate.id !== candidateId)
+            leads: current.leads.filter((lead) => lead.id !== leadId)
           }));
           return;
         }
-        const { error } = await supabase.from("candidates").delete().eq("id", candidateId);
+        const { error } = await supabase.from("leads").delete().eq("id", leadId);
         if (!error) {
           setData((current) => ({
             ...current,
-            candidates: current.candidates.filter((candidate) => candidate.id !== candidateId)
+            leads: current.leads.filter((lead) => lead.id !== leadId)
           }));
         }
       },
-      async importCandidates(rows) {
+      async importLeads(rows) {
         const targetAgencyId = data.agency?.id;
         if (!targetAgencyId) return 0;
         if (isDemo || !supabase) {
           const now = new Date().toISOString();
-          const imported = rows.map<Candidate>((row) => ({
+          const imported = rows.map<Lead>((row) => ({
             ...row,
-            id: id("candidate"),
+            id: id("lead"),
             agencyId: targetAgencyId,
             createdAt: now,
             updatedAt: now
           }));
-          setData((current) => ({ ...current, candidates: [...imported, ...current.candidates] }));
+          setData((current) => ({ ...current, leads: [...imported, ...current.leads] }));
           return imported.length;
         }
 
         const { data: inserted, error } = await supabase
-          .from("candidates")
-          .insert(rows.map((row) => toCandidateRow(row, targetAgencyId)))
+          .from("leads")
+          .insert(rows.map((row) => toLeadRow(row, targetAgencyId)))
           .select("*");
         if (error || !inserted) return 0;
-        const imported = (inserted as CandidateRow[]).map(toCandidate);
-        setData((current) => ({ ...current, candidates: [...imported, ...current.candidates] }));
+        const imported = (inserted as LeadRow[]).map(toLead);
+        setData((current) => ({ ...current, leads: [...imported, ...current.leads] }));
         return imported.length;
       },
       async updateAgency(input) {

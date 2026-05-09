@@ -54,7 +54,7 @@ create table if not exists public.staff_members (
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.candidates (
+create table if not exists public.leads (
   id uuid primary key default gen_random_uuid(),
   agency_id uuid not null references public.agencies(id) on delete cascade,
   full_name text not null,
@@ -74,9 +74,9 @@ create table if not exists public.candidates (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.candidate_notes (
+create table if not exists public.lead_notes (
   id uuid primary key default gen_random_uuid(),
-  candidate_id uuid not null references public.candidates(id) on delete cascade,
+  lead_id uuid not null references public.leads(id) on delete cascade,
   agency_id uuid not null references public.agencies(id) on delete cascade,
   body text not null,
   created_by uuid references auth.users(id) on delete set null,
@@ -85,10 +85,10 @@ create table if not exists public.candidate_notes (
 
 create index if not exists profiles_agency_id_idx on public.profiles (agency_id);
 create index if not exists staff_members_agency_id_idx on public.staff_members (agency_id);
-create index if not exists candidates_agency_id_idx on public.candidates (agency_id);
-create index if not exists candidates_follow_up_idx on public.candidates (agency_id, next_follow_up_date);
-create index if not exists candidates_stage_idx on public.candidates (agency_id, stage);
-create index if not exists candidate_notes_agency_id_idx on public.candidate_notes (agency_id);
+create index if not exists leads_agency_id_idx on public.leads (agency_id);
+create index if not exists leads_follow_up_idx on public.leads (agency_id, next_follow_up_date);
+create index if not exists leads_stage_idx on public.leads (agency_id, stage);
+create index if not exists lead_notes_agency_id_idx on public.lead_notes (agency_id);
 
 create or replace view public.intake_agencies as
 select id, name, created_at
@@ -106,9 +106,9 @@ begin
 end;
 $$;
 
-drop trigger if exists candidates_touch_updated_at on public.candidates;
-create trigger candidates_touch_updated_at
-before update on public.candidates
+drop trigger if exists leads_touch_updated_at on public.leads;
+create trigger leads_touch_updated_at
+before update on public.leads
 for each row execute function public.touch_updated_at();
 
 create or replace function public.current_agency_id()
@@ -157,22 +157,21 @@ for each row execute function public.handle_new_user();
 alter table public.agencies enable row level security;
 alter table public.profiles enable row level security;
 alter table public.staff_members enable row level security;
-alter table public.candidates enable row level security;
-alter table public.candidate_notes enable row level security;
+alter table public.leads enable row level security;
+alter table public.lead_notes enable row level security;
 
 drop policy if exists "Users can read own agency" on public.agencies;
 drop policy if exists "Users can update own agency" on public.agencies;
 drop policy if exists "Users can read own profile" on public.profiles;
 drop policy if exists "Agency scoped staff read" on public.staff_members;
 drop policy if exists "Agency scoped staff write" on public.staff_members;
-drop policy if exists "Agency scoped candidates read" on public.candidates;
-drop policy if exists "Agency scoped candidates write" on public.candidates;
-drop policy if exists "Workspace scoped leads read" on public.candidates;
-drop policy if exists "Workspace scoped leads write" on public.candidates;
-drop policy if exists "Public intake can create new candidates" on public.candidates;
-drop policy if exists "Public intake can create new leads" on public.candidates;
-drop policy if exists "Agency scoped notes read" on public.candidate_notes;
-drop policy if exists "Agency scoped notes write" on public.candidate_notes;
+drop policy if exists "Agency scoped leads read" on public.leads;
+drop policy if exists "Agency scoped leads write" on public.leads;
+drop policy if exists "Workspace scoped leads read" on public.leads;
+drop policy if exists "Workspace scoped leads write" on public.leads;
+drop policy if exists "Public intake can create new leads" on public.leads;
+drop policy if exists "Agency scoped notes read" on public.lead_notes;
+drop policy if exists "Agency scoped notes write" on public.lead_notes;
 
 create policy "Users can read own agency"
 on public.agencies for select
@@ -197,16 +196,16 @@ using (agency_id = public.current_agency_id())
 with check (agency_id = public.current_agency_id());
 
 create policy "Workspace scoped leads read"
-on public.candidates for select
+on public.leads for select
 using (agency_id = public.current_agency_id());
 
 create policy "Workspace scoped leads write"
-on public.candidates for all
+on public.leads for all
 using (agency_id = public.current_agency_id())
 with check (agency_id = public.current_agency_id());
 
 create policy "Public intake can create new leads"
-on public.candidates for insert
+on public.leads for insert
 to anon
 with check (
   stage = 'New'
@@ -215,10 +214,10 @@ with check (
 );
 
 create policy "Agency scoped notes read"
-on public.candidate_notes for select
+on public.lead_notes for select
 using (agency_id = public.current_agency_id());
 
 create policy "Agency scoped notes write"
-on public.candidate_notes for all
+on public.lead_notes for all
 using (agency_id = public.current_agency_id())
 with check (agency_id = public.current_agency_id());

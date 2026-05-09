@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Copy, MessageSquare, Wand2, X } from "lucide-react";
-import { formatDate } from "@/lib/candidate-utils";
-import { Candidate, FollowUpKind } from "@/lib/types";
+import { formatDate } from "@/lib/lead-utils";
+import { Lead, FollowUpKind } from "@/lib/types";
 
 const messageTypes: FollowUpKind[] = [
   "First follow-up",
@@ -18,11 +18,11 @@ const messageTypes: FollowUpKind[] = [
 ];
 
 export function GenerateMessageButton({
-  candidate,
+  lead,
   label = "Generate Message",
   compact = false
 }: {
-  candidate: Candidate;
+  lead: Lead;
   label?: string;
   compact?: boolean;
 }) {
@@ -43,17 +43,17 @@ export function GenerateMessageButton({
         <MessageSquare size={compact ? 16 : 18} />
         {compact ? "Message" : label}
       </button>
-      <MessageGeneratorModal candidate={candidate} open={open} onClose={() => setOpen(false)} />
+      <MessageGeneratorModal lead={lead} open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
 
 export function MessageGeneratorModal({
-  candidate,
+  lead,
   open,
   onClose
 }: {
-  candidate: Candidate;
+  lead: Lead;
   open: boolean;
   onClose: () => void;
 }) {
@@ -68,7 +68,7 @@ export function MessageGeneratorModal({
     const response = await fetch("/api/follow-up-message", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ candidate, kind })
+      body: JSON.stringify({ lead, kind })
     });
     const data = (await response.json()) as { message: string };
     setMessage(data.message);
@@ -120,12 +120,12 @@ export function MessageGeneratorModal({
         </label>
 
         <div className="mt-4 grid gap-3 text-sm text-[#687184] sm:grid-cols-3">
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Stage: <strong className="text-slate-800">{candidate.stage}</strong></span>
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Info: <strong className="text-slate-800">{candidate.documentStatus}</strong></span>
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Next: <strong className="text-slate-800">{formatDate(candidate.nextFollowUpDate)}</strong></span>
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Stage: <strong className="text-slate-800">{lead.stage}</strong></span>
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Info: <strong className="text-slate-800">{lead.documentStatus}</strong></span>
+          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Next: <strong className="text-slate-800">{formatDate(lead.nextFollowUpDate)}</strong></span>
         </div>
         <div className="mt-3 rounded-lg bg-[#EFF6FF] px-3 py-2 text-sm text-blue-900">
-          Last contacted: {formatDate(candidate.lastContactedDate)}
+          Last contacted: {formatDate(lead.lastContactedDate)}
         </div>
 
         <textarea

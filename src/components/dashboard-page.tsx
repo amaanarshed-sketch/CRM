@@ -5,20 +5,20 @@ import { AlertTriangle, CalendarClock, CheckCircle2, FileWarning, Trophy, UserX,
 import {
   computeMetrics,
   formatDate,
-  isCandidateStale,
+  isLeadStale,
   needsFollowUp,
   sortOldestFollowUpFirst
-} from "@/lib/candidate-utils";
+} from "@/lib/lead-utils";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
-import { CandidateTable } from "./candidate-table";
+import { LeadTable } from "./lead-table";
 
 export function DashboardPage() {
-  const { agency, candidates } = useApp();
+  const { agency, leads } = useApp();
   const staleThreshold = agency?.staleThresholdDays || 7;
-  const metrics = computeMetrics(candidates, staleThreshold);
-  const dueNow = sortOldestFollowUpFirst(candidates.filter(needsFollowUp)).slice(0, 8);
-  const staleRows = candidates.filter((candidate) => isCandidateStale(candidate, staleThreshold)).slice(0, 6);
+  const metrics = computeMetrics(leads, staleThreshold);
+  const dueNow = sortOldestFollowUpFirst(leads.filter(needsFollowUp)).slice(0, 8);
+  const staleRows = leads.filter((lead) => isLeadStale(lead, staleThreshold)).slice(0, 6);
 
   return (
     <AppShell>
@@ -26,7 +26,7 @@ export function DashboardPage() {
         kicker="Follow-up control center"
         title="Who needs follow-up right now?"
         action={
-          <Link href="/candidates" className="btn-primary">
+          <Link href="/leads" className="btn-primary">
             Add or update leads
           </Link>
         }
@@ -55,13 +55,13 @@ export function DashboardPage() {
             </Link>
           </div>
           <div className="space-y-3">
-            {dueNow.map((candidate) => (
-              <Link key={candidate.id} href={`/candidates/${candidate.id}`} className="flex items-center justify-between rounded-xl border border-amber-100 bg-amber-50/55 p-3 hover:ring-2 hover:ring-amber-200">
+            {dueNow.map((lead) => (
+              <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between rounded-xl border border-amber-100 bg-amber-50/55 p-3 hover:ring-2 hover:ring-amber-200">
                 <span>
-                  <strong className="block text-slate-950">{candidate.fullName}</strong>
-                  <span className="text-sm text-slate-500">{candidate.jobInterest || "No interest"} - {candidate.phone || "No phone"}</span>
+                  <strong className="block text-slate-950">{lead.fullName}</strong>
+                  <span className="text-sm text-slate-500">{lead.jobInterest || "No interest"} - {lead.phone || "No phone"}</span>
                 </span>
-                <span className="text-right text-sm font-black text-amber-800">{formatDate(candidate.nextFollowUpDate)}</span>
+                <span className="text-right text-sm font-black text-amber-800">{formatDate(lead.nextFollowUpDate)}</span>
               </Link>
             ))}
             {!dueNow.length && <EmptyState title="No follow-ups due" body="When a lead needs attention today, it will show up here first." />}
@@ -79,13 +79,13 @@ export function DashboardPage() {
             </Link>
           </div>
           <div className="space-y-3">
-            {staleRows.map((candidate) => (
-              <Link key={candidate.id} href={`/candidates/${candidate.id}`} className="flex items-center justify-between rounded-xl border border-red-100 p-3 hover:bg-red-50/45">
+            {staleRows.map((lead) => (
+              <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between rounded-xl border border-red-100 p-3 hover:bg-red-50/45">
                 <span>
-                  <strong className="block text-slate-950">{candidate.fullName}</strong>
-                  <span className="text-sm text-slate-500">Last contacted {formatDate(candidate.lastContactedDate)}</span>
+                  <strong className="block text-slate-950">{lead.fullName}</strong>
+                  <span className="text-sm text-slate-500">Last contacted {formatDate(lead.lastContactedDate)}</span>
                 </span>
-                <span className="status-pill border-red-200 bg-red-50 text-red-700">{candidate.stage}</span>
+                <span className="status-pill border-red-200 bg-red-50 text-red-700">{lead.stage}</span>
               </Link>
             ))}
             {!staleRows.length && <EmptyState title="No stale leads" body="Leads with old contact dates will appear here before they slip away." />}
@@ -95,11 +95,11 @@ export function DashboardPage() {
 
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-xl font-black text-slate-950">Recent leads</h2>
-        <Link href="/candidates" className="text-sm font-black text-[#2563EB] hover:underline">
+        <Link href="/leads" className="text-sm font-black text-[#2563EB] hover:underline">
           Manage all
         </Link>
       </div>
-      <CandidateTable rows={candidates.slice(0, 8)} showFilters={false} />
+      <LeadTable rows={leads.slice(0, 8)} showFilters={false} />
     </AppShell>
   );
 }

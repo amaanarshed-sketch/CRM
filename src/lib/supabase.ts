@@ -9,7 +9,7 @@ export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl as string, supabaseAnonKey as string)
   : null;
 
-export type CandidateRow = {
+export type LeadRow = {
   id: string;
   agency_id: string;
   full_name: string;

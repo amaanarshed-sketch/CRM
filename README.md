@@ -35,8 +35,8 @@ Run `supabase/schema.sql` in the Supabase SQL editor before using sign up/login.
 - `agencies`
 - `profiles`
 - `staff_members`
-- `candidates` (currently stores leads; see database rename notes below)
-- `candidate_notes` (currently stores lead notes; see database rename notes below)
+- `leads`
+- `lead_notes`
 
 The schema also creates:
 
@@ -53,7 +53,3 @@ The schema also creates:
 4. Restart the Next.js dev server.
 5. Sign up from the app. The database trigger creates the workspace automatically.
 6. Use Settings to copy the public lead form link.
-
-## Database rename notes
-
-The UI has been repositioned to LeadLoop and lead-management language. The database still uses `candidates` and `candidate_notes` table names to avoid a risky table rename during the product repositioning pass. A later migration can rename those tables to `leads` and `lead_notes` after Supabase policies, indexes, and application queries are updated together.

@@ -47,7 +47,7 @@ export type StaffMember = {
   createdAt: string;
 };
 
-export type Candidate = {
+export type Lead = {
   id: string;
   agencyId: string;
   fullName: string;
@@ -82,7 +82,7 @@ export type AppData = {
   agencies: Agency[];
   users: Profile[];
   staffMembers: StaffMember[];
-  candidates: Candidate[];
+  leads: Lead[];
 };
 
-export type CandidateInput = Omit<Candidate, "id" | "agencyId" | "createdAt" | "updatedAt">;
+export type LeadInput = Omit<Lead, "id" | "agencyId" | "createdAt" | "updatedAt">;

@@ -1,5 +1,5 @@
 import { StalePage } from "@/components/stale-page";
 
-export default function StaleCandidates() {
+export default function StaleLeads() {
   return <StalePage />;
 }
