@@ -1,0 +1,115 @@
+import {
+  Candidate,
+  CandidateInput,
+  DOCUMENT_STATUSES,
+  DocumentStatus,
+  PIPELINE_STAGES,
+  PipelineStage
+} from "./types";
+
+export const TERMINAL_STAGES: PipelineStage[] = ["Placed", "Rejected"];
+
+export function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export function addDaysISO(date: string, days: number) {
+  const base = date ? new Date(`${date}T00:00:00`) : new Date();
+  base.setDate(base.getDate() + days);
+  return base.toISOString().slice(0, 10);
+}
+
+export function daysBetween(fromDate: string, toDate = todayISO()) {
+  if (!fromDate) return Number.POSITIVE_INFINITY;
+  const from = new Date(`${fromDate}T00:00:00`).getTime();
+  const to = new Date(`${toDate}T00:00:00`).getTime();
+  return Math.floor((to - from) / 86_400_000);
+}
+
+export function isTerminalStage(stage: PipelineStage) {
+  return TERMINAL_STAGES.includes(stage);
+}
+
+export function isCandidateStale(candidate: Candidate, thresholdDays: number) {
+  return !isTerminalStage(candidate.stage) && daysBetween(candidate.lastContactedDate) > thresholdDays;
+}
+
+export function needsFollowUp(candidate: Candidate) {
+  return (
+    Boolean(candidate.nextFollowUpDate) &&
+    candidate.nextFollowUpDate <= todayISO() &&
+    !isTerminalStage(candidate.stage)
+  );
+}
+
+export function normalizeStage(value?: string): PipelineStage {
+  const match = PIPELINE_STAGES.find((stage) => stage.toLowerCase() === (value || "").trim().toLowerCase());
+  return match || "New";
+}
+
+export function normalizeDocumentStatus(value?: string): DocumentStatus {
+  const match = DOCUMENT_STATUSES.find((status) => status.toLowerCase() === (value || "").trim().toLowerCase());
+  return match || "Not requested";
+}
+
+export function makeCandidateInput(input: Partial<CandidateInput>): CandidateInput {
+  return {
+    fullName: input.fullName || "",
+    phone: input.phone || "",
+    email: input.email || "",
+    source: input.source || "",
+    jobInterest: input.jobInterest || "",
+    location: input.location || "",
+    assignedStaff: input.assignedStaff || "",
+    stage: input.stage || "New",
+    lastContactedDate: input.lastContactedDate || "",
+    nextFollowUpDate: input.nextFollowUpDate || "",
+    documentStatus: input.documentStatus || "Not requested",
+    notes: input.notes || "",
+    experience: input.experience || ""
+  };
+}
+
+export function computeMetrics(candidates: Candidate[], staleThresholdDays: number) {
+  const active = candidates.filter((candidate) => !isTerminalStage(candidate.stage));
+  return {
+    active: active.length,
+    followUpsDue: candidates.filter(needsFollowUp).length,
+    stale: candidates.filter((candidate) => isCandidateStale(candidate, staleThresholdDays)).length,
+    documentsPending: candidates.filter((candidate) => candidate.documentStatus !== "Complete").length,
+    interviewsScheduled: candidates.filter((candidate) => candidate.stage === "Interview Scheduled").length,
+    placed: candidates.filter((candidate) => candidate.stage === "Placed").length,
+    rejected: candidates.filter((candidate) => candidate.stage === "Rejected").length
+  };
+}
+
+export function sortOldestFollowUpFirst(candidates: Candidate[]) {
+  return [...candidates].sort((a, b) => {
+    if (!a.nextFollowUpDate) return 1;
+    if (!b.nextFollowUpDate) return -1;
+    return a.nextFollowUpDate.localeCompare(b.nextFollowUpDate);
+  });
+}
+
+export function formatDate(date?: string) {
+  if (!date) return "Not set";
+  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(
+    new Date(`${date}T00:00:00`)
+  );
+}
+
+export function getStageTone(stage: PipelineStage) {
+  if (stage === "Placed") return "bg-emerald-50 text-emerald-700 border-emerald-200";
+  if (stage === "Rejected") return "bg-rose-50 text-rose-700 border-rose-200";
+  if (stage === "Stale") return "bg-amber-50 text-amber-800 border-amber-200";
+  if (stage.includes("Pending")) return "bg-orange-50 text-orange-700 border-orange-200";
+  if (stage.includes("Interview")) return "bg-blue-50 text-blue-700 border-blue-200";
+  return "bg-slate-50 text-slate-700 border-slate-200";
+}
+
+export function groupCount<T extends string>(values: T[]) {
+  return values.reduce<Record<string, number>>((acc, value) => {
+    acc[value || "Unassigned"] = (acc[value || "Unassigned"] || 0) + 1;
+    return acc;
+  }, {});
+}

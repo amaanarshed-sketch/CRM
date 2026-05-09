@@ -1,0 +1,87 @@
+export const PIPELINE_STAGES = [
+  "New",
+  "Contacted",
+  "Documents Pending",
+  "Screened",
+  "Interview Scheduled",
+  "Client Feedback Pending",
+  "Selected",
+  "Placed",
+  "Rejected",
+  "Stale"
+] as const;
+
+export type PipelineStage = (typeof PIPELINE_STAGES)[number];
+
+export const DOCUMENT_STATUSES = [
+  "Not requested",
+  "Requested",
+  "Partial",
+  "Complete",
+  "Missing"
+] as const;
+
+export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number];
+
+export type Agency = {
+  id: string;
+  name: string;
+  staleThresholdDays: number;
+  defaultFollowUpDays: number;
+  createdAt: string;
+};
+
+export type Profile = {
+  id: string;
+  agencyId: string;
+  fullName: string;
+  email: string;
+  password: string;
+  createdAt: string;
+};
+
+export type StaffMember = {
+  id: string;
+  agencyId: string;
+  name: string;
+  email?: string;
+  createdAt: string;
+};
+
+export type Candidate = {
+  id: string;
+  agencyId: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  source: string;
+  jobInterest: string;
+  location: string;
+  assignedStaff: string;
+  stage: PipelineStage;
+  lastContactedDate: string;
+  nextFollowUpDate: string;
+  documentStatus: DocumentStatus;
+  notes: string;
+  experience?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type FollowUpKind =
+  | "First follow-up"
+  | "Document reminder"
+  | "Interview reminder"
+  | "No-response follow-up"
+  | "Stale candidate reactivation"
+  | "Client feedback pending follow-up"
+  | "Final soft follow-up";
+
+export type AppData = {
+  agencies: Agency[];
+  users: Profile[];
+  staffMembers: StaffMember[];
+  candidates: Candidate[];
+};
+
+export type CandidateInput = Omit<Candidate, "id" | "agencyId" | "createdAt" | "updatedAt">;
