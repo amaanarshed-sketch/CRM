@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { Activity, ArrowRight, LockKeyhole } from "lucide-react";
 import { useApp } from "./app-provider";
 
@@ -110,6 +111,11 @@ export function AuthScreen() {
           >
             Try demo workspace
           </button>
+          <div className="mt-5 flex flex-wrap justify-center gap-3 text-xs font-bold text-[#687184]">
+            <Link className="hover:text-[#2563EB]" href="/privacy">Privacy</Link>
+            <Link className="hover:text-[#2563EB]" href="/terms">Terms</Link>
+            <Link className="hover:text-[#2563EB]" href="/support">Support</Link>
+          </div>
         </form>
       </section>
     </main>

@@ -3,19 +3,8 @@
 import { useState } from "react";
 import { Copy, MessageSquare, Wand2, X } from "lucide-react";
 import { formatDate } from "@/lib/lead-utils";
+import { FOLLOW_UP_KINDS } from "@/lib/follow-up-message";
 import { Lead, FollowUpKind } from "@/lib/types";
-
-const messageTypes: FollowUpKind[] = [
-  "First follow-up",
-  "Appointment reminder",
-  "Info request",
-  "Proposal follow-up",
-  "Reactivation message",
-  "Won lead thank-you",
-  "Lost lead polite close",
-  "No-response follow-up",
-  "Stale lead reactivation"
-];
 
 export function GenerateMessageButton({
   lead,
@@ -113,7 +102,7 @@ export function MessageGeneratorModal({
               setCopied(false);
             }}
           >
-            {messageTypes.map((type) => (
+            {FOLLOW_UP_KINDS.map((type) => (
               <option key={type}>{type}</option>
             ))}
           </select>

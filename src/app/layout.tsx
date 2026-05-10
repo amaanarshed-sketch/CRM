@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { AppProvider } from "@/components/app-provider";
 import "./globals.css";
 
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <AppProvider>{children}</AppProvider>
+        <Analytics />
       </body>
     </html>
   );

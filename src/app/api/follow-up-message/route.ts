@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Lead, FollowUpKind } from "@/lib/types";
-import { formatDate } from "@/lib/lead-utils";
+import { buildTemplateMessage, isFollowUpKind } from "@/lib/follow-up-message";
+import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 
 type RequestBody = {
   lead: Lead;
@@ -8,8 +9,30 @@ type RequestBody = {
 };
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as RequestBody;
-  const fallback = templateMessage(body.kind, body.lead);
+  const rateLimit = checkRateLimit({
+    key: getRateLimitKey(request, "follow-up-message"),
+    limit: 30,
+    windowMs: 60_000
+  });
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many message requests. Please wait a minute and try again." },
+      { status: 429, headers: { "Retry-After": `${Math.ceil((rateLimit.resetAt - Date.now()) / 1000)}` } }
+    );
+  }
+
+  let body: RequestBody;
+  try {
+    body = (await request.json()) as RequestBody;
+  } catch {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
+
+  if (!isFollowUpKind(body.kind) || !body.lead || typeof body.lead !== "object") {
+    return NextResponse.json({ error: "Lead and message type are required." }, { status: 400 });
+  }
+
+  const fallback = buildTemplateMessage(body.kind, body.lead);
 
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json({ message: fallback, source: "template" });
@@ -60,27 +83,4 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ message: fallback, source: "template" });
   }
-}
-
-function templateMessage(kind: FollowUpKind, lead: Lead) {
-  const name = lead.fullName || "there";
-  const interest = lead.jobInterest || "your inquiry";
-  const lastContact = formatDate(lead.lastContactedDate);
-  const nextFollowUp = formatDate(lead.nextFollowUpDate);
-  const infoStatus = lead.documentStatus || "Not requested";
-  const notes = lead.notes ? `\n\nContext: ${lead.notes}` : "";
-
-  const templates: Record<FollowUpKind, string> = {
-    "First follow-up": `Hi ${name}, thanks for your interest in ${interest}. Are you still open to a quick chat about the next steps? Let me know a good time today or tomorrow.${notes}`,
-    "Appointment reminder": `Hi ${name}, quick reminder about our appointment for ${interest}. Please confirm if the time still works for you, or let me know if we should reschedule.${notes}`,
-    "Info request": `Hi ${name}, quick follow-up on ${interest}. I just need a little more information to help you properly. Current info status: ${infoStatus}. Could you send the missing details when convenient?${notes}`,
-    "Proposal follow-up": `Hi ${name}, checking in on the proposal/details we shared for ${interest}. Any questions or changes you would like us to adjust?${notes}`,
-    "Reactivation message": `Hi ${name}, checking back in about ${interest}. We last connected on ${lastContact}. If this is still relevant, I would be happy to pick things back up.${notes}`,
-    "Won lead thank-you": `Hi ${name}, thank you for choosing us for ${interest}. We appreciate it and will keep you updated on the next steps.${notes}`,
-    "Lost lead polite close": `Hi ${name}, just closing the loop on ${interest}. No worries if the timing is not right now. If anything changes, feel free to message us anytime.${notes}`,
-    "No-response follow-up": `Hi ${name}, I tried reaching you after our last contact on ${lastContact}. Are you still interested in ${interest}? A quick yes or no is completely fine.${notes}`,
-    "Stale lead reactivation": `Hi ${name}, checking back in about ${interest}. Your follow-up was marked for ${nextFollowUp}. If you are still interested, reply when convenient and I can help with next steps.${notes}`
-  };
-
-  return templates[kind];
 }
