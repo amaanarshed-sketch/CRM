@@ -23,6 +23,7 @@ export function LeadForm({ lead, onSave, submitLabel = "Save lead" }: Props) {
         fullName: String(form.get("fullName") || ""),
         phone: String(form.get("phone") || ""),
         email: String(form.get("email") || ""),
+        company: String(form.get("company") || ""),
         source: String(form.get("source") || ""),
         jobInterest: String(form.get("jobInterest") || ""),
         location: String(form.get("location") || ""),
@@ -47,6 +48,7 @@ export function LeadForm({ lead, onSave, submitLabel = "Save lead" }: Props) {
         <Field name="fullName" label="Full name" defaultValue={initial.fullName} required />
         <Field name="phone" label="Phone number" defaultValue={initial.phone} />
         <Field name="email" label="Email" type="email" defaultValue={initial.email} />
+        <Field name="company" label="Company" defaultValue={initial.company} />
         <Field name="source" label="Source" defaultValue={initial.source} />
         <Field name="jobInterest" label="Lead interest" defaultValue={initial.jobInterest} />
         <Field name="location" label="Location" defaultValue={initial.location} />

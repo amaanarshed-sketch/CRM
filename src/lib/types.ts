@@ -53,6 +53,7 @@ export type Lead = {
   fullName: string;
   phone: string;
   email: string;
+  company: string;
   source: string;
   jobInterest: string;
   location: string;

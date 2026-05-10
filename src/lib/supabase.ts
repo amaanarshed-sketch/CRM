@@ -15,6 +15,7 @@ export type LeadRow = {
   full_name: string;
   phone: string | null;
   email: string | null;
+  company: string | null;
   source: string | null;
   job_interest: string | null;
   location: string | null;

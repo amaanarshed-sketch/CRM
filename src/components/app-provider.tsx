@@ -99,6 +99,7 @@ function toLead(row: LeadRow): Lead {
     fullName: row.full_name,
     phone: row.phone || "",
     email: row.email || "",
+    company: row.company || "",
     source: row.source || "",
     jobInterest: row.job_interest || "",
     location: row.location || "",
@@ -120,6 +121,7 @@ function toLeadRow(input: Partial<LeadInput>, agencyId: string) {
     full_name: input.fullName || "",
     phone: input.phone || null,
     email: input.email || null,
+    company: input.company || null,
     source: input.source || null,
     job_interest: input.jobInterest || null,
     location: input.location || null,
@@ -138,6 +140,7 @@ function toLeadPatch(input: Partial<LeadInput>) {
   if ("fullName" in input) patch.full_name = input.fullName || "";
   if ("phone" in input) patch.phone = input.phone || null;
   if ("email" in input) patch.email = input.email || null;
+  if ("company" in input) patch.company = input.company || null;
   if ("source" in input) patch.source = input.source || null;
   if ("jobInterest" in input) patch.job_interest = input.jobInterest || null;
   if ("location" in input) patch.location = input.location || null;
@@ -181,6 +184,7 @@ function buildDemoData() {
       fullName: "Sarah Ahmed",
       phone: "+94 77 123 4567",
       email: "sarah@example.com",
+      company: "Glow Studio",
       source: "Instagram DM",
       jobInterest: "Salon bridal package inquiry",
       location: "Colombo",
@@ -199,6 +203,7 @@ function buildDemoData() {
       fullName: "Daniel Perera",
       phone: "+94 71 555 0199",
       email: "daniel@example.com",
+      company: "Perera Events",
       source: "Referral",
       jobInterest: "Restaurant private event inquiry",
       location: "Kandy",
@@ -217,6 +222,7 @@ function buildDemoData() {
       fullName: "Nadeesha Silva",
       phone: "+94 76 888 4422",
       email: "nadeesha@example.com",
+      company: "",
       source: "Website",
       jobInterest: "Real estate buyer lead",
       location: "Galle",
@@ -235,6 +241,7 @@ function buildDemoData() {
       fullName: "Rizwan Khan",
       phone: "+94 75 777 2200",
       email: "rizwan@example.com",
+      company: "Khan Trading",
       source: "CSV import",
       jobInterest: "B2B agency service lead",
       location: "Negombo",

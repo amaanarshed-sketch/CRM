@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, CalendarClock, Mail, MapPin, Phone, Siren, UserRound } from "lucide-react";
+import { ArrowLeft, Building2, CalendarClock, Mail, MapPin, Phone, Siren, UserRound } from "lucide-react";
 import { formatDate, isLeadStale, needsFollowUp } from "@/lib/lead-utils";
 import { useApp } from "./app-provider";
 import { AppShell, PageHeader } from "./app-shell";
@@ -52,6 +52,7 @@ export function LeadDetailPage() {
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <InfoItem icon={<Phone size={17} />} label="Phone" value={lead.phone || "Not set"} />
                 <InfoItem icon={<Mail size={17} />} label="Email" value={lead.email || "Not set"} />
+                <InfoItem icon={<Building2 size={17} />} label="Company" value={lead.company || "Not set"} />
                 <InfoItem icon={<MapPin size={17} />} label="Location" value={lead.location || "Not set"} />
                 <InfoItem icon={<UserRound size={17} />} label="Assigned staff" value={lead.assignedStaff || "Unassigned"} />
               </div>

@@ -22,7 +22,7 @@ const navItems = [
   { href: "/leads", label: "Leads", icon: Users },
   { href: "/follow-ups", label: "Follow-ups", icon: CalendarClock },
   { href: "/stale", label: "Stale Leads", icon: Siren },
-  { href: "/import", label: "Import CSV", icon: FileUp },
+  { href: "/import", label: "Import", icon: FileUp },
   { href: "/intake", label: "Lead Form", icon: FormInput },
   { href: "/reports", label: "Reports", icon: BarChart3 },
   { href: "/settings", label: "Settings", icon: Settings }

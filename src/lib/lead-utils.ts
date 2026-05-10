@@ -58,6 +58,7 @@ export function makeLeadInput(input: Partial<LeadInput>): LeadInput {
     fullName: input.fullName || "",
     phone: input.phone || "",
     email: input.email || "",
+    company: input.company || "",
     source: input.source || "",
     jobInterest: input.jobInterest || "",
     location: input.location || "",

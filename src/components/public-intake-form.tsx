@@ -26,6 +26,7 @@ export function PublicIntakeForm() {
         fullName: String(form.get("fullName") || ""),
         phone: String(form.get("phone") || ""),
         email: String(form.get("email") || ""),
+        company: "",
         location: String(form.get("location") || ""),
         jobInterest: String(form.get("jobInterest") || ""),
         experience: String(form.get("experience") || ""),

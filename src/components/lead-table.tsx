@@ -31,6 +31,7 @@ export function LeadTable({ rows, showFilters = true }: Props) {
         lead.fullName,
         lead.phone,
         lead.email,
+        lead.company,
         lead.jobInterest,
         lead.assignedStaff,
         lead.stage,

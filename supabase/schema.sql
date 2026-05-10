@@ -60,6 +60,7 @@ create table if not exists public.leads (
   full_name text not null,
   phone text,
   email text,
+  company text,
   source text,
   job_interest text,
   location text,

@@ -51,6 +51,7 @@ export function parseLeadCSV(text: string): LeadInput[] {
         fullName: value("full_name", "name", "lead_name"),
         phone: value("phone"),
         email: value("email"),
+        company: value("company", "business_name"),
         source: value("source"),
         jobInterest: value("job_interest", "interest", "lead_interest"),
         location: value("location"),

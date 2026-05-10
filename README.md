@@ -45,6 +45,12 @@ The schema also creates:
 - A public intake insert policy that only allows anonymous form submissions as `stage = 'New'`.
 - An `updated_at` trigger for leads.
 
+If you already created the schema before the import upgrade, run:
+
+```sql
+alter table public.leads add column if not exists company text;
+```
+
 ## Production setup checklist
 
 1. Create a Supabase project.
