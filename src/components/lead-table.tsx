@@ -165,8 +165,18 @@ export function LeadTable({ rows, showFilters = true }: Props) {
           <div className="empty-state">
             <p className="font-black text-slate-800">{rows.length ? "No matching leads" : "No leads yet"}</p>
             <p className="mt-1 text-sm text-[#687184]">
-              {rows.length ? "Try a different search term or stage filter." : "Add your first lead or import a CSV to start tracking follow-ups."}
+              {rows.length ? "Try a different search term or stage filter." : "Import your existing lead sheet or share your intake form to start filling the pipeline."}
             </p>
+            {!rows.length && (
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <Link href="/import" className="btn-primary text-sm">
+                  Import leads
+                </Link>
+                <Link href="/intake" className="btn-secondary text-sm">
+                  Share intake form
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

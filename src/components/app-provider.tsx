@@ -50,6 +50,7 @@ function toAgency(row: {
   name: string;
   stale_threshold_days: number;
   default_follow_up_days: number;
+  onboarding_completed: boolean;
   created_at: string;
 }): Agency {
   return {
@@ -57,6 +58,7 @@ function toAgency(row: {
     name: row.name,
     staleThresholdDays: row.stale_threshold_days,
     defaultFollowUpDays: row.default_follow_up_days,
+    onboardingCompleted: row.onboarding_completed,
     createdAt: row.created_at
   };
 }
@@ -67,6 +69,7 @@ function toPublicAgency(row: { id: string; name: string; created_at: string }): 
     name: row.name,
     staleThresholdDays: 7,
     defaultFollowUpDays: 2,
+    onboardingCompleted: true,
     createdAt: row.created_at
   };
 }
@@ -161,6 +164,7 @@ function buildDemoData() {
     name: "LeadLoop Demo Team",
     staleThresholdDays: 7,
     defaultFollowUpDays: 2,
+    onboardingCompleted: true,
     createdAt: now
   };
   const user: Profile = {
@@ -293,7 +297,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const [agencyResult, staffResult, leadResult] = await Promise.all([
       supabase
         .from("agencies")
-        .select("id,name,stale_threshold_days,default_follow_up_days,created_at")
+        .select("id,name,stale_threshold_days,default_follow_up_days,onboarding_completed,created_at")
         .eq("id", profile.agencyId)
         .single(),
       supabase.from("staff_members").select("id,agency_id,name,email,created_at").order("created_at"),
@@ -519,10 +523,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
           .update({
             name: nextAgency.name,
             stale_threshold_days: nextAgency.staleThresholdDays,
-            default_follow_up_days: nextAgency.defaultFollowUpDays
+            default_follow_up_days: nextAgency.defaultFollowUpDays,
+            onboarding_completed: nextAgency.onboardingCompleted
           })
           .eq("id", data.agency.id)
-          .select("id,name,stale_threshold_days,default_follow_up_days,created_at")
+          .select("id,name,stale_threshold_days,default_follow_up_days,onboarding_completed,created_at")
           .single();
         if (!error && updated) {
           const agency = toAgency(updated);

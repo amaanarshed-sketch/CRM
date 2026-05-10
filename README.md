@@ -51,6 +51,7 @@ If you already created the schema before the import upgrade, run:
 
 ```sql
 alter table public.leads add column if not exists company text;
+alter table public.agencies add column if not exists onboarding_completed boolean not null default false;
 ```
 
 ## Production setup checklist
@@ -85,7 +86,7 @@ Then verify these flows on the deployed app:
 7. Copy the public lead form link from Settings, submit a test lead, and confirm it appears in the workspace.
 8. Create a second workspace and confirm it cannot see the first workspace's data.
 9. Confirm demo workspace loads without login and does not mix with real workspace data.
-10. Confirm `/privacy`, `/terms`, `/support`, `/robots.txt`, and `/sitemap.xml` load.
+10. Confirm `/privacy`, `/terms`, `/contact`, `/support`, `/robots.txt`, and `/sitemap.xml` load.
 
 ## Deployment notes
 
@@ -96,3 +97,11 @@ Then verify these flows on the deployed app:
 - The follow-up message API has an in-memory per-IP rate limit for basic abuse protection. For multi-region/high-traffic production, move rate limiting to Vercel Firewall, Upstash, or another shared store.
 - Vercel Analytics is installed through `@vercel/analytics`.
 - Replace the MVP Privacy/Terms text with reviewed legal copy before paid or broad public launch.
+
+## Launch status
+
+- Real workspace data uses Supabase Auth and Supabase Postgres.
+- Browser `localStorage` is only used to remember the unauthenticated demo workspace.
+- Public intake submissions insert leads into Supabase through the public intake policy.
+- CSV/XLSX imports save leads into the signed-in workspace.
+- New real workspaces see a short onboarding panel for workspace name, staff names, stale threshold, and follow-up timing.

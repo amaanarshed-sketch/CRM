@@ -114,6 +114,7 @@ export function AuthScreen() {
           <div className="mt-5 flex flex-wrap justify-center gap-3 text-xs font-bold text-[#687184]">
             <Link className="hover:text-[#2563EB]" href="/privacy">Privacy</Link>
             <Link className="hover:text-[#2563EB]" href="/terms">Terms</Link>
+            <Link className="hover:text-[#2563EB]" href="/contact">Contact</Link>
             <Link className="hover:text-[#2563EB]" href="/support">Support</Link>
           </div>
         </form>

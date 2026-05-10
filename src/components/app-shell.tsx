@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useApp } from "./app-provider";
 import { AuthScreen } from "./auth-screen";
+import { OnboardingCard } from "./onboarding-card";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -85,7 +86,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
       </aside>
-      <main className="min-w-0 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">{children}</main>
+      <main className="min-w-0 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+        {!isDemo && <OnboardingCard />}
+        {children}
+      </main>
     </div>
   );
 }

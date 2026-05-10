@@ -27,6 +27,7 @@ export type Agency = {
   name: string;
   staleThresholdDays: number;
   defaultFollowUpDays: number;
+  onboardingCompleted: boolean;
   createdAt: string;
 };
 

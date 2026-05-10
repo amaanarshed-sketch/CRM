@@ -30,6 +30,7 @@ export default function SupportPage() {
         <div className="flex flex-wrap gap-2">
           <Link className="btn-secondary" href="/privacy">Privacy Policy</Link>
           <Link className="btn-secondary" href="/terms">Terms</Link>
+          <Link className="btn-secondary" href="/contact">Contact</Link>
           <Link className="btn-primary" href="/">Open LeadLoop</Link>
         </div>
       </section>

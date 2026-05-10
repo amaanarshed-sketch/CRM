@@ -13,12 +13,13 @@ Use this runbook for each production or beta launch.
   - `OPENAI_API_KEY` if OpenAI-generated messages should be enabled
   - `OPENAI_MODEL`, default `gpt-4.1-mini`
 - Add the production domain and local dev URL in Supabase Auth redirect settings.
-- Confirm `/privacy`, `/terms`, `/support`, `/robots.txt`, and `/sitemap.xml` load on the production domain.
+- Confirm `/privacy`, `/terms`, `/contact`, `/support`, `/robots.txt`, and `/sitemap.xml` load on the production domain.
 
 ## 2. Supabase Verification
 
 - Run `supabase/schema.sql` in the production Supabase project.
 - Run `supabase/migrations/20260510_add_lead_company.sql` only if upgrading an older database.
+- Run `supabase/migrations/20260510_add_onboarding_completed.sql` only if upgrading an older database.
 - Run `supabase/launch_checks.sql` and confirm:
   - RLS is enabled for `agencies`, `profiles`, `staff_members`, `leads`, and `lead_notes`.
   - Workspace-scoped read/write policies exist.
@@ -27,7 +28,7 @@ Use this runbook for each production or beta launch.
 
 ## 3. Smoke QA
 
-- Create Workspace A, add a lead, update stage, update follow-up dates, and generate a draft message.
+- Create Workspace A, complete onboarding, add a lead, update stage, update follow-up dates, and generate a draft message.
 - Import the sample CSV and verify mapping, preview, duplicate handling, and import summary.
 - Submit the public lead form for Workspace A and confirm the lead appears in that workspace.
 - Create Workspace B and confirm it cannot see Workspace A leads, staff, reports, settings, or intake submissions.

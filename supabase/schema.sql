@@ -35,6 +35,7 @@ create table if not exists public.agencies (
   name text not null,
   stale_threshold_days integer not null default 7 check (stale_threshold_days > 0),
   default_follow_up_days integer not null default 2 check (default_follow_up_days > 0),
+  onboarding_completed boolean not null default false,
   created_at timestamptz not null default now()
 );
 
