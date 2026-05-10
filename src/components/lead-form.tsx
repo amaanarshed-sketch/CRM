@@ -39,7 +39,7 @@ export function LeadForm({ lead, onSave, submitLabel = "Save lead" }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="app-card grid gap-5 p-5">
+    <form onSubmit={handleSubmit} className="app-card surface-enter grid gap-5 p-5">
       <div>
         <h2 className="text-lg font-black text-[#08090A]">Lead information</h2>
         <p className="text-sm text-[#687184]">Keep the contact, interest, owner, and next action in one place.</p>

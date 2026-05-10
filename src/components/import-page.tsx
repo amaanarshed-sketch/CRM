@@ -118,7 +118,7 @@ export function ImportPage() {
     <AppShell>
       <PageHeader title="Import Leads" kicker="Bulk lead intake" />
 
-      <section className="app-card mb-6 p-5">
+      <section className="app-card glass-panel mb-6 p-5">
         <div className="grid gap-5 lg:grid-cols-[1fr_1.05fr]">
           <div>
             <h2 className="text-lg font-black text-[#08090A]">Upload your lead sheet</h2>
@@ -128,7 +128,7 @@ export function ImportPage() {
             <p className="mt-2 text-xs font-bold uppercase tracking-wide text-[#8A94A6]">
               Accepted file types: .csv and .xlsx
             </p>
-            <label className="mt-4 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-[#D8CCBD] bg-[#F3EADC]/45 p-8 text-center font-bold text-slate-700 hover:border-blue-300 hover:bg-blue-50">
+            <label className="mt-4 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-[#D8CCBD] bg-[#F3EADC]/45 p-8 text-center font-bold text-slate-700 transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-lg hover:shadow-blue-600/10">
               <FileUp size={26} />
               <span>Choose CSV or Excel file</span>
               <span className="text-xs font-semibold text-[#8A94A6]">First row should contain column headers.</span>
@@ -146,7 +146,7 @@ export function ImportPage() {
             {message && <Notice tone="blue" text={message} />}
           </div>
 
-          <div className="app-card-soft p-4">
+          <div className="glass-soft rounded-[14px] p-4">
             <div className="flex items-center gap-2">
               <FileSpreadsheet size={20} className="text-[#2563EB]" />
               <h3 className="font-black text-[#08090A]">How import works</h3>
@@ -163,7 +163,7 @@ export function ImportPage() {
 
       {parsed && (
         <div className="grid gap-6">
-          <section className="app-card p-5">
+          <section className="app-card surface-enter p-5">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <h2 className="text-lg font-black text-[#08090A]">Map columns</h2>
@@ -175,7 +175,7 @@ export function ImportPage() {
             </div>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {parsed.headers.map((header) => (
-                <label key={header} className="block rounded-xl border border-[#D8CCBD]/70 bg-white p-3 text-sm font-bold text-slate-700">
+                <label key={header} className="block rounded-xl border border-[#D8CCBD]/70 bg-white/78 p-3 text-sm font-bold text-slate-700 transition hover:border-blue-200 hover:bg-white">
                   <span className="block truncate">{header}</span>
                   <select
                     className="field-control mt-2"
@@ -193,7 +193,7 @@ export function ImportPage() {
             </div>
           </section>
 
-          <section className="app-card p-5">
+          <section className="app-card surface-enter p-5">
             <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 className="text-lg font-black text-[#08090A]">Preview and warnings</h2>
@@ -209,7 +209,7 @@ export function ImportPage() {
             </div>
 
             {duplicateRows.length > 0 && (
-              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <div className="glass-soft mt-4 rounded-xl border-amber-200 bg-amber-50/72 p-4">
                 <div className="flex gap-2">
                   <AlertTriangle size={18} className="mt-0.5 text-amber-700" />
                   <div>
@@ -241,7 +241,7 @@ export function ImportPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {preparedRows.slice(0, 10).map((row) => (
-                    <tr key={row.rowNumber} className={row.errors.length ? "bg-red-50/40" : row.duplicate ? "bg-amber-50/35" : ""}>
+                    <tr key={row.rowNumber} className={`table-row-polish ${row.errors.length ? "bg-red-50/40" : row.duplicate ? "bg-amber-50/35" : ""}`}>
                       <td className="px-3 py-2 font-bold text-[#687184]">{row.rowNumber}</td>
                       <td className="px-3 py-2 font-black text-[#08090A]">{row.input.fullName || "Not set"}</td>
                       <td className="px-3 py-2 text-[#687184]">{row.input.phone || "Not set"}</td>
@@ -277,7 +277,7 @@ export function ImportPage() {
       )}
 
       {summary && (
-        <section className="app-card mt-6 p-5">
+        <section className="app-card surface-enter mt-6 p-5">
           <div className="flex items-center gap-2">
             <CheckCircle2 size={20} className="text-emerald-600" />
             <h2 className="text-lg font-black text-[#08090A]">Import summary</h2>
@@ -334,7 +334,7 @@ function DuplicateChoice({
   label: string;
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 rounded-lg bg-white/75 px-3 py-2">
+    <label className="flex cursor-pointer items-center gap-2 rounded-lg bg-white/75 px-3 py-2 transition hover:bg-white hover:shadow-sm">
       <input type="radio" checked={current === value} onChange={() => onChange(value)} />
       {label}
     </label>
@@ -343,7 +343,7 @@ function DuplicateChoice({
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-[#D8CCBD]/70 bg-white p-4">
+    <div className="glass-soft rounded-xl p-4">
       <p className="text-2xl font-black text-[#08090A]">{value}</p>
       <p className="text-sm font-bold text-[#687184]">{label}</p>
     </div>

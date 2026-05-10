@@ -83,8 +83,8 @@ export function MessageGeneratorModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/45 p-4 backdrop-blur-sm">
-      <section className="app-card w-full max-w-2xl p-5 shadow-2xl">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/42 p-4 backdrop-blur-md">
+      <section className="app-card glass-panel modal-enter w-full max-w-2xl p-5 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="eyebrow">Draft only</p>
@@ -120,9 +120,9 @@ export function MessageGeneratorModal({
         </label>
 
         <div className="mt-4 grid gap-3 text-sm text-[#687184] sm:grid-cols-3">
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Stage: <strong className="text-slate-800">{lead.stage}</strong></span>
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Info: <strong className="text-slate-800">{lead.documentStatus}</strong></span>
-          <span className="rounded-lg bg-[#F3EADC]/65 px-3 py-2">Next: <strong className="text-slate-800">{formatDate(lead.nextFollowUpDate)}</strong></span>
+          <span className="glass-soft rounded-lg px-3 py-2">Stage: <strong className="text-slate-800">{lead.stage}</strong></span>
+          <span className="glass-soft rounded-lg px-3 py-2">Info: <strong className="text-slate-800">{lead.documentStatus}</strong></span>
+          <span className="glass-soft rounded-lg px-3 py-2">Next: <strong className="text-slate-800">{formatDate(lead.nextFollowUpDate)}</strong></span>
         </div>
         <div className="mt-3 rounded-lg bg-[#EFF6FF] px-3 py-2 text-sm text-blue-900">
           Last contacted: {formatDate(lead.lastContactedDate)}

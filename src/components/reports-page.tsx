@@ -51,7 +51,7 @@ function ReportCard({ label, value, helper, tone = "blue" }: { label: string; va
   }[tone];
 
   return (
-    <div className="app-card p-5">
+    <div className="app-card interactive-card p-5">
       <p className={`inline-flex rounded-xl px-3 py-1 text-3xl font-black ${toneClass}`}>{value}</p>
       <p className="mt-3 text-sm font-black text-[#08090A]">{label}</p>
       <p className="mt-1 text-xs font-semibold text-[#8A94A6]">{helper}</p>
@@ -62,7 +62,7 @@ function ReportCard({ label, value, helper, tone = "blue" }: { label: string; va
 function Breakdown({ title, rows }: { title: string; rows: Record<string, number> }) {
   const max = Math.max(1, ...Object.values(rows));
   return (
-    <div className="app-card p-5">
+    <div className="app-card surface-enter p-5">
       <h2 className="mb-1 text-lg font-black text-[#08090A]">{title}</h2>
       <p className="mb-4 text-sm text-[#687184]">A quick read on ownership and pipeline balance.</p>
       <div className="space-y-3">
@@ -72,8 +72,8 @@ function Breakdown({ title, rows }: { title: string; rows: Record<string, number
               <span className="text-slate-700">{label}</span>
               <span className="text-[#687184]">{value}</span>
             </div>
-            <div className="h-2 rounded-full bg-[#F3EADC]">
-              <div className="h-2 rounded-full bg-[#2563EB]" style={{ width: `${(value / max) * 100}%` }} />
+            <div className="h-2 overflow-hidden rounded-full bg-[#F3EADC]">
+              <div className="h-2 rounded-full bg-[#2563EB] transition-all duration-500 ease-out" style={{ width: `${(value / max) * 100}%` }} />
             </div>
           </div>
         ))}

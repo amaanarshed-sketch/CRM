@@ -44,7 +44,7 @@ export function DashboardPage() {
       </section>
 
       <section className="mb-6 grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="app-card border-amber-200 p-5">
+        <div className="app-card interactive-card border-amber-200 bg-white/86 p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-black text-[#08090A]">Follow-ups due now</h2>
@@ -56,7 +56,7 @@ export function DashboardPage() {
           </div>
           <div className="space-y-3">
             {dueNow.map((lead) => (
-              <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between rounded-xl border border-amber-100 bg-amber-50/55 p-3 hover:ring-2 hover:ring-amber-200">
+              <Link key={lead.id} href={`/leads/${lead.id}`} className="glass-soft flex items-center justify-between rounded-xl p-3 transition hover:-translate-y-0.5 hover:ring-2 hover:ring-amber-200">
                 <span>
                   <strong className="block text-slate-950">{lead.fullName}</strong>
                   <span className="text-sm text-slate-500">{lead.jobInterest || "No interest"} - {lead.phone || "No phone"}</span>
@@ -68,7 +68,7 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="app-card p-5">
+        <div className="app-card interactive-card p-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-xl font-black text-slate-950">Stale watchlist</h2>
@@ -80,7 +80,7 @@ export function DashboardPage() {
           </div>
           <div className="space-y-3">
             {staleRows.map((lead) => (
-              <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between rounded-xl border border-red-100 p-3 hover:bg-red-50/45">
+              <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between rounded-xl border border-red-100 bg-white/72 p-3 transition hover:-translate-y-0.5 hover:bg-red-50/45">
                 <span>
                   <strong className="block text-slate-950">{lead.fullName}</strong>
                   <span className="text-sm text-slate-500">Last contacted {formatDate(lead.lastContactedDate)}</span>
@@ -126,7 +126,7 @@ function MetricCard({
   }[tone];
 
   return (
-    <div className="app-card p-4">
+    <div className="app-card interactive-card p-4">
       <div className="flex items-start justify-between">
         <span className={`grid h-10 w-10 place-items-center rounded-xl ${toneClass}`}>
           {icon}

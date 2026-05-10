@@ -12,7 +12,7 @@ export function IntakePage() {
   return (
     <AppShell>
       <PageHeader title="Lead Form" kicker="Public lead intake link" />
-      <section className="app-card p-5">
+      <section className="app-card glass-panel surface-enter p-5">
         <h2 className="text-lg font-black text-[#08090A]">Share this link with leads</h2>
         <p className="mt-1 text-sm text-[#687184]">
           Submissions enter your workspace as stage New. No messages are sent automatically.

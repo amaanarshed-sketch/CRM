@@ -24,7 +24,7 @@ export function LeadsPage() {
         }
       />
       {adding && (
-        <div className="mb-6">
+        <div className="fade-slide-in mb-6">
           <LeadForm
             submitLabel="Create lead"
             onSave={(input) => {

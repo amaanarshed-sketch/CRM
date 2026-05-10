@@ -47,7 +47,7 @@ export function PublicIntakeForm() {
   return (
     <main className="min-h-screen px-4 py-8">
       <div className="mx-auto max-w-2xl">
-        <div className="mb-6 flex items-center gap-3">
+        <div className="glass-soft mb-6 flex items-center gap-3 rounded-2xl px-4 py-3">
           <span className="grid h-10 w-10 place-items-center rounded-lg bg-[#2563EB] text-white">
             <Activity size={22} />
           </span>
@@ -58,17 +58,17 @@ export function PublicIntakeForm() {
         </div>
 
         {!agency ? (
-          <section className="app-card p-8 text-center">
+          <section className="app-card surface-enter p-8 text-center">
             <p className="font-bold text-[#687184]">This intake link is not available in this browser workspace.</p>
           </section>
         ) : submitted ? (
-          <section className="app-card border-emerald-200 p-8 text-center">
+          <section className="app-card surface-enter border-emerald-200 p-8 text-center">
             <CheckCircle2 className="mx-auto text-emerald-600" size={38} />
             <h1 className="mt-3 text-2xl font-black text-[#08090A]">Thanks, your details were received.</h1>
             <p className="mt-2 text-[#687184]">The team can now follow up from their dashboard.</p>
           </section>
         ) : (
-          <form onSubmit={handleSubmit} className="app-card grid gap-4 p-5">
+          <form onSubmit={handleSubmit} className="app-card glass-panel modal-enter grid gap-4 p-5">
             <div>
               <p className="eyebrow">New inquiry</p>
               <h1 className="mt-1 text-2xl font-black text-[#08090A]">Tell us what you are interested in</h1>

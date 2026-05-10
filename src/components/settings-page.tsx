@@ -28,7 +28,7 @@ export function SettingsPage() {
   return (
     <AppShell>
       <PageHeader title="Settings" kicker="Workspace defaults" />
-      <form onSubmit={handleSubmit} className="app-card grid gap-5 p-5">
+      <form onSubmit={handleSubmit} className="app-card surface-enter grid gap-5 p-5">
         <div>
           <h2 className="text-lg font-black text-[#08090A]">Workspace controls</h2>
           <p className="text-sm text-[#687184]">Set follow-up defaults, stale lead rules, and staff names.</p>
@@ -47,7 +47,7 @@ export function SettingsPage() {
             placeholder="One staff member per line"
           />
         </label>
-        <div className="app-card-soft p-4">
+        <div className="glass-soft rounded-[14px] p-4">
           <p className="text-sm font-black text-[#08090A]">Public lead form link</p>
           <p className="mt-1 text-sm text-[#687184]">Share this with leads when you want new inquiries to enter LeadLoop automatically.</p>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row">

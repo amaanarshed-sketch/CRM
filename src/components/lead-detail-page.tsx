@@ -46,7 +46,7 @@ export function LeadDetailPage() {
           </section>
 
           <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="app-card p-5">
+            <div className="app-card interactive-card p-5">
               <p className="eyebrow">Lead overview</p>
               <h2 className="mt-1 text-xl font-black text-[#08090A]">{lead.jobInterest || "No interest added"}</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -58,7 +58,7 @@ export function LeadDetailPage() {
               </div>
             </div>
 
-            <div className="app-card-soft p-5">
+            <div className="glass-soft rounded-[14px] p-5">
               <p className="eyebrow">Follow-up info</p>
               <dl className="mt-3 grid gap-3 text-sm">
                 <div className="flex items-center justify-between gap-4">
@@ -89,7 +89,7 @@ export function LeadDetailPage() {
                 deleteLead(lead.id);
                 router.push("/leads");
               }}
-              className="rounded-lg border border-rose-200 bg-white px-4 py-2 font-bold text-rose-700 hover:bg-rose-50"
+              className="rounded-lg border border-rose-200 bg-white px-4 py-2 font-bold text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-50"
             >
               Delete lead
             </button>
@@ -102,7 +102,7 @@ export function LeadDetailPage() {
 
 function SignalCard({ title, value, icon, active }: { title: string; value: string; icon?: React.ReactNode; active?: boolean }) {
   return (
-    <div className={`app-card p-4 ${active ? "border-amber-200 bg-amber-50" : ""}`}>
+    <div className={`app-card interactive-card p-4 ${active ? "border-amber-200 bg-amber-50/82" : ""}`}>
       <div className="flex items-center gap-2 text-sm font-bold text-[#687184]">
         {icon}
         {title}
@@ -114,7 +114,7 @@ function SignalCard({ title, value, icon, active }: { title: string; value: stri
 
 function InfoItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-[#D8CCBD]/70 bg-white px-3 py-2.5">
+    <div className="rounded-xl border border-[#D8CCBD]/70 bg-white/78 px-3 py-2.5 transition hover:border-blue-200 hover:bg-white">
       <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#8A94A6]">
         {icon}
         {label}

@@ -24,6 +24,7 @@
 body {
   margin: 0;
   background:
+    radial-gradient(circle at 78% 6rem, rgba(245, 158, 11, 0.09), transparent 18rem),
     radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 26rem),
     linear-gradient(180deg, #fbf8f2 0%, var(--background) 32rem),
     var(--background);
@@ -49,6 +50,11 @@ textarea {
   font-size: 0.77rem;
   font-weight: 700;
   white-space: nowrap;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .focus-ring:focus {
@@ -61,12 +67,81 @@ textarea {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.055);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease;
 }
 
 .app-card-soft {
   border: 1px solid rgba(216, 204, 189, 0.75);
   border-radius: 14px;
   background: rgba(243, 234, 220, 0.58);
+}
+
+.glass-panel {
+  border: 1px solid rgba(216, 204, 189, 0.62);
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow:
+    0 18px 46px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(18px) saturate(1.18);
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
+}
+
+.glass-soft {
+  border: 1px solid rgba(216, 204, 189, 0.58);
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.055);
+  backdrop-filter: blur(14px) saturate(1.12);
+  -webkit-backdrop-filter: blur(14px) saturate(1.12);
+}
+
+.interactive-card {
+  animation: surface-rise 360ms ease both;
+}
+
+.interactive-card:hover {
+  border-color: rgba(37, 99, 235, 0.22);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.09);
+  transform: translateY(-2px);
+}
+
+.surface-enter {
+  animation: surface-rise 360ms ease both;
+}
+
+.fade-slide-in {
+  animation: fade-slide-in 260ms ease both;
+}
+
+.modal-enter {
+  animation: modal-enter 180ms ease-out both;
+}
+
+.nav-link {
+  position: relative;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.nav-link:hover {
+  transform: translateX(2px);
+}
+
+.table-row-polish {
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.table-row-polish:hover {
+  box-shadow: inset 3px 0 0 rgba(37, 99, 235, 0.48);
 }
 
 .btn-primary,
@@ -84,7 +159,9 @@ textarea {
     background-color 150ms ease,
     border-color 150ms ease,
     color 150ms ease,
-    box-shadow 150ms ease;
+    box-shadow 150ms ease,
+    transform 150ms ease,
+    filter 150ms ease;
 }
 
 .btn-primary {
@@ -97,6 +174,8 @@ textarea {
 .btn-primary:hover {
   border-color: var(--accent-strong);
   background: var(--accent-strong);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.24);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -109,6 +188,13 @@ textarea {
 .btn-ghost:hover {
   background: #f8fafc;
   border-color: #c5b8a7;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-ghost:active {
+  transform: translateY(0) scale(0.99);
 }
 
 .btn-ghost {
@@ -125,8 +211,10 @@ textarea {
   padding: 0.66rem 0.78rem;
   color: var(--ink);
   transition:
+    background-color 150ms ease,
     border-color 150ms ease,
-    box-shadow 150ms ease;
+    box-shadow 150ms ease,
+    transform 150ms ease;
 }
 
 .field-control:focus {
@@ -146,7 +234,62 @@ textarea {
 .empty-state {
   border: 1px dashed rgba(104, 113, 132, 0.32);
   border-radius: 14px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.72);
   padding: 1.4rem;
   text-align: center;
+  animation: fade-slide-in 260ms ease both;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes surface-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  .interactive-card:hover,
+  .nav-link:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-ghost:hover {
+    transform: none;
+  }
 }

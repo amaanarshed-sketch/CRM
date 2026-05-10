@@ -46,9 +46,9 @@ export function LeadTable({ rows, showFilters = true }: Props) {
   }, [query, rows, stage]);
 
   return (
-    <section className="app-card overflow-hidden">
+    <section className="app-card surface-enter overflow-hidden">
       {showFilters && (
-        <div className="flex flex-col gap-3 border-b border-[#D8CCBD]/70 bg-white/70 p-4 md:flex-row md:items-center md:justify-between">
+        <div className="glass-soft flex flex-col gap-3 rounded-none border-x-0 border-t-0 border-b border-[#D8CCBD]/70 p-4 md:flex-row md:items-center md:justify-between">
           <label className="relative block md:w-96">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8A94A6]" size={18} />
             <input
@@ -92,7 +92,7 @@ export function LeadTable({ rows, showFilters = true }: Props) {
               const stale = isLeadStale(lead, staleThreshold);
               const due = needsFollowUp(lead);
               return (
-                <tr key={lead.id} className={`transition hover:bg-[#EFF6FF]/50 ${stale ? "bg-red-50/25" : due ? "bg-amber-50/35" : ""}`}>
+                <tr key={lead.id} className={`table-row-polish ${stale ? "bg-red-50/25" : due ? "bg-amber-50/35" : ""} hover:bg-[#EFF6FF]/50`}>
                   <td className="px-4 py-3">
                     <Link href={`/leads/${lead.id}`} className="font-black text-[#08090A] hover:text-[#2563EB]">
                       {lead.fullName || "Unnamed lead"}
@@ -143,10 +143,10 @@ export function LeadTable({ rows, showFilters = true }: Props) {
                         <Eye size={16} />
                       </Link>
                       <GenerateMessageButton lead={lead} label="Message" compact />
-                      <button onClick={() => updateLead(lead.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 bg-white p-2 text-emerald-700 hover:bg-emerald-50" aria-label="Mark won">
+                      <button onClick={() => updateLead(lead.id, { stage: "Won", nextFollowUpDate: "" })} className="rounded-lg border border-emerald-200 bg-white p-2 text-emerald-700 transition hover:-translate-y-0.5 hover:bg-emerald-50" aria-label="Mark won">
                         <CheckCircle2 size={16} />
                       </button>
-                      <button onClick={() => updateLead(lead.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 bg-white p-2 text-rose-700 hover:bg-rose-50" aria-label="Mark lost">
+                      <button onClick={() => updateLead(lead.id, { stage: "Lost", nextFollowUpDate: "" })} className="rounded-lg border border-rose-200 bg-white p-2 text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-50" aria-label="Mark lost">
                         <XCircle size={16} />
                       </button>
                       <button onClick={() => updateLead(lead.id, { lastContactedDate: todayISO() })} className="btn-secondary px-2 py-2 text-xs">
